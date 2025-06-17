@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Currency Converter | MMK ⇔ THB</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- 
+        Chosen Palette: "Indigo Dream" - Adapted from the Flutter app's AppColors.
+        Primary: Indigo (#1A237E), Success: Green (#4CAF50), Background: Lavender to Cyan Gradient (#F3E5F5 to #E1F5FE).
+    -->
+    <!-- 
+        Application Structure Plan: A single-view, task-oriented application. The structure is designed to mimic the simplicity and directness of a calculator, focusing the user entirely on the conversion task. It uses a central card layout to group all interactive elements (inputs, toggles), with a clear result display below. This single-column, top-to-bottom flow is highly intuitive on both desktop and mobile, eliminating the need for navigation and ensuring immediate usability. A "Clear" button provides a simple reset action.
+    -->
+    <!-- 
+        Visualization & Content Choices:
+        - Report Info: Core conversion inputs (rate, amount). Goal: User input. Viz/Method: HTML <input> fields. Interaction: Real-time calculation on 'input' event, debounced for performance. Justification: Standard, universally understood method for data entry. Library/Method: Vanilla JS.
+        - Report Info: Conversion direction toggle. Goal: Switch between MMK->THB and THB->MMK. Viz/Method: Custom toggle switch built with HTML/Tailwind. Interaction: 'click' event toggles state. Justification: More intuitive and faster than a dropdown for a binary choice. Library/Method: HTML/Tailwind/JS.
+        - Report Info: Dynamic result display. Goal: Show conversion result or errors. Viz/Method: Styled <div> with large text. Interaction: Text and color are updated dynamically by JS based on calculation outcome. Justification: Prominent feedback is crucial for a calculator-style app. Color coding (green/red) provides instant validation. Library/Method: JS.
+        - Report Info: Rate helper text. Goal: Provide context for the rate. Viz/Method: A simple <p> tag. Interaction: Content updates in real-time as user types the rate. Justification: Adds value and clarity to the primary input field. Library/Method: JS.
+        - Report Info: Number Formatting. Goal: Improve readability of numbers. Viz/Method: Text formatting within inputs and result. Interaction: Applied automatically via JS. Justification: Essential for usability with large currency numbers. Library/Method: JS Intl.NumberFormat.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F3E5F5;
+            background-image: linear-gradient(to bottom, #F3E5F5, #E1F5FE);
+        }
+    </style>
+</head>
+<body class="min-h-screen w-full flex items-center justify-center p-4">
+
+    <main class="w-full max-w-md mx-auto">
+        <header class="text-center mb-6">
+            <h1 class="text-3xl font-bold text-[#1A237E]">SCI Currency Converter</h1>
+            <p class="text-md text-[#3F51B5]">Myanmar Kyat (MMK) & Thai Baht (THB)</p>
+        </header>
+
+        <div id="converter-card" class="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg p-6 md:p-8">
+            
+            <div class="space-y-6">
+                <!-- Rate Input -->
+                <div>
+                    <label for="rate-input" class="block text-sm font-medium text-gray-700 mb-1">Exchange Rate</label>
+                    <div class="relative">
+                         <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                            <span class="text-gray-500 sm:text-sm">📈</span>
+                        </div>
+                        <input type="text" id="rate-input" inputmode="decimal" class="w-full pl-10 pr-12 py-3 rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-lg" placeholder="0.00">
+                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+                            <span class="text-gray-500 sm:text-sm">THB</span>
+                        </div>
+                    </div>
+                    <p id="rate-helper" class="text-xs text-gray-500 mt-2 ml-1 h-4">Rate for 100,000 MMK</p>
+                </div>
+                
+                <!-- Toggle Switch -->
+                <div class="flex items-center justify-center">
+                    <div id="conversion-toggle" class="flex items-center bg-indigo-100 rounded-full p-1 cursor-pointer">
+                        <button id="toggle-mmk-thb" class="px-6 py-2 text-sm font-semibold rounded-full bg-indigo-600 text-white">MMK → THB</button>
+                        <button id="toggle-thb-mmk" class="px-6 py-2 text-sm font-semibold rounded-full text-indigo-600">THB → MMK</button>
+                    </div>
+                </div>
+
+                <!-- Amount Input -->
+                <div>
+                    <label for="amount-input" class="block text-sm font-medium text-gray-700 mb-1">Amount to Convert</label>
+                    <div class="relative">
+                        <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                            <span id="amount-prefix" class="text-gray-500 font-semibold sm:text-sm">MMK</span>
+                        </div>
+                        <input type="text" id="amount-input" inputmode="decimal" class="w-full pl-14 pr-4 py-3 rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-lg" placeholder="0.00">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Result Display -->
+        <div id="result-container" class="mt-6 text-center transition-opacity duration-300 opacity-0">
+             <div class="bg-white/60 backdrop-blur-sm rounded-2xl shadow-md p-6">
+                <p class="text-sm font-medium text-indigo-800 mb-1">Result</p>
+                <p id="result-text" class="text-4xl font-bold text-indigo-800 break-words">฿ 0.00</p>
+             </div>
+        </div>
+        
+        <!-- Clear Button -->
+        <div class="mt-6 text-center">
+            <button id="clear-button" class="text-sm font-semibold text-indigo-500 hover:text-indigo-700">Clear All</button>
+        </div>
+
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const rateInput = document.getElementById('rate-input');
+            const amountInput = document.getElementById('amount-input');
+            const resultText = document.getElementById('result-text');
+            const resultContainer = document.getElementById('result-container');
+            const rateHelper = document.getElementById('rate-helper');
+            const amountPrefix = document.getElementById('amount-prefix');
+            const toggleMmktThb = document.getElementById('toggle-mmk-thb');
+            const toggleThbMmk = document.getElementById('toggle-thb-mmk');
+            const clearButton = document.getElementById('clear-button');
+
+            let state = {
+                rate: 0,
+                amount: 0,
+                convertToBaht: true, // true: MMK -> THB, false: THB -> MMK
+            };
+            
+            let debounceTimer;
+
+            const numberFormatter = new Intl.NumberFormat('en-US', {
+                maximumFractionDigits: 3
+            });
+
+            function updateUI() {
+                // Toggle styles
+                if (state.convertToBaht) {
+                    toggleMmktThb.classList.add('bg-indigo-600', 'text-white');
+                    toggleMmktThb.classList.remove('text-indigo-600');
+                    toggleThbMmk.classList.remove('bg-indigo-600', 'text-white');
+                    toggleThbMmk.classList.add('text-indigo-600');
+                    amountPrefix.textContent = 'MMK';
+                } else {
+                    toggleThbMmk.classList.add('bg-indigo-600', 'text-white');
+                    toggleThbMmk.classList.remove('text-indigo-600');
+                    toggleMmktThb.classList.remove('bg-indigo-600', 'text-white');
+                    toggleMmktThb.classList.add('text-indigo-600');
+                    amountPrefix.textContent = '฿';
+                }
+
+                // Rate helper text
+                if (state.rate > 0) {
+                    const mmkPerBaht = 100000 / state.rate;
+                    rateHelper.textContent = `(1 THB ≈ ${numberFormatter.format(mmkPerBaht)} MMK)`;
+                } else {
+                    rateHelper.textContent = 'Rate for 100,000 MMK';
+                }
+            }
+
+            function calculateAndDisplay() {
+                const rateStr = rateInput.value.replace(/,/g, '');
+                const amountStr = amountInput.value.replace(/,/g, '');
+
+                state.rate = parseFloat(rateStr) || 0;
+                state.amount = parseFloat(amountStr) || 0;
+                
+                updateUI();
+
+                if (state.rate <= 0) {
+                    displayResult('Please enter a valid exchange rate', 'error');
+                    return;
+                }
+                if (state.amount <= 0) {
+                    displayResult('', 'default');
+                    return;
+                }
+                
+                try {
+                    let result = 0;
+                    let resultString = '';
+                    if (state.convertToBaht) {
+                        result = (state.amount / 100000) * state.rate;
+                        resultString = `฿ ${numberFormatter.format(result)}`;
+                    } else {
+                        result = (state.amount / state.rate) * 100000;
+                        resultString = `MMK ${numberFormatter.format(result)}`;
+                    }
+                    displayResult(resultString, 'success');
+                } catch(e) {
+                    displayResult('Calculation Error', 'error');
+                }
+            }
+
+            function displayResult(text, type) {
+                if (!text) {
+                    resultContainer.classList.add('opacity-0');
+                    return;
+                }
+                
+                resultContainer.classList.remove('opacity-0');
+                resultText.textContent = text;
+                
+                resultText.classList.remove('text-red-500', 'text-green-600', 'text-indigo-800');
+                
+                switch(type) {
+                    case 'error':
+                        resultText.classList.add('text-red-500');
+                        break;
+                    case 'success':
+                        resultText.classList.add('text-green-600');
+                        break;
+                    default:
+                        resultText.classList.add('text-indigo-800');
+                }
+            }
+            
+            function formatInput(e) {
+                const input = e.target;
+                let value = input.value;
+                const selectionStart = input.selectionStart;
+                const originalLength = value.length;
+
+                // Allow only numbers and one decimal point
+                value = value.replace(/[^0-9.]/g, '');
+                const parts = value.split('.');
+                if (parts.length > 2) {
+                    value = parts[0] + '.' + parts.slice(1).join('');
+                }
+
+                // Format integer part with commas
+                const [integerPart, decimalPart] = value.split('.');
+                const formattedInteger = numberFormatter.format(parseInt(integerPart.replace(/,/g, ''), 10) || 0).split('.')[0];
+                
+                let formattedValue = formattedInteger;
+                if (decimalPart !== undefined) {
+                    formattedValue += '.' + decimalPart.substring(0, 3);
+                } else if (value.endsWith('.')) {
+                    formattedValue += '.';
+                }
+                
+                input.value = formattedValue;
+                
+                // Adjust cursor position
+                const newLength = input.value.length;
+                const newSelection = selectionStart + (newLength - originalLength);
+                if (selectionStart > 0 && newLength > originalLength) {
+                    input.setSelectionRange(newSelection, newSelection);
+                }
+            }
+
+
+            const debouncedCalculate = () => {
+                clearTimeout(debounceTimer);
+                debounceTimer = setTimeout(calculateAndDisplay, 250);
+            };
+
+            // Event Listeners
+            rateInput.addEventListener('input', (e) => {
+                formatInput(e);
+                debouncedCalculate();
+            });
+            
+            amountInput.addEventListener('input', (e) => {
+                formatInput(e);
+                debouncedCalculate();
+            });
+            
+            toggleMmktThb.addEventListener('click', () => {
+                if (!state.convertToBaht) {
+                    state.convertToBaht = true;
+                    calculateAndDisplay();
+                }
+            });
+            
+            toggleThbMmk.addEventListener('click', () => {
+                if (state.convertToBaht) {
+                    state.convertToBaht = false;
+                    calculateAndDisplay();
+                }
+            });
+            
+            clearButton.addEventListener('click', () => {
+                rateInput.value = '';
+                amountInput.value = '';
+                state.rate = 0;
+                state.amount = 0;
+                calculateAndDisplay();
+                rateInput.focus();
+            });
+
+            // Initial UI setup
+            updateUI();
+        });
+    </script>
+</body>
+</html>
