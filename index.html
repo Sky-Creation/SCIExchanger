@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Currency Converter | MMK ⇔ THB</title>
+    <title>SCI Currency Converter | MMK ⇔ THB</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -13,15 +13,14 @@
         Primary: Indigo (#1A237E), Success: Green (#4CAF50), Background: Lavender to Cyan Gradient (#F3E5F5 to #E1F5FE).
     -->
     <!-- 
-        Application Structure Plan: A single-view, task-oriented application. The structure is designed to mimic the simplicity and directness of a calculator, focusing the user entirely on the conversion task. It uses a central card layout to group all interactive elements (inputs, toggles), with a clear result display below. This single-column, top-to-bottom flow is highly intuitive on both desktop and mobile, eliminating the need for navigation and ensuring immediate usability. A "Clear" button provides a simple reset action.
+        Application Structure Plan: A single-view, task-oriented application. The structure is designed to mimic the simplicity and directness of a calculator, focusing the user entirely on the conversion task. It uses a central card layout to group all interactive elements (inputs, toggles), with a clear result display below. This single-column, top-to-bottom flow is highly intuitive on both desktop and mobile, eliminating the need for navigation and ensuring immediate usability. A "Clear" button provides a simple reset action. Enhancements include a live clock, animated UI elements, and automatic rate standardization for a more robust user experience.
     -->
     <!-- 
         Visualization & Content Choices:
-        - Report Info: Core conversion inputs (rate, amount). Goal: User input. Viz/Method: HTML <input> fields. Interaction: Real-time calculation on 'input' event, debounced for performance. Justification: Standard, universally understood method for data entry. Library/Method: Vanilla JS.
-        - Report Info: Conversion direction toggle. Goal: Switch between MMK->THB and THB->MMK. Viz/Method: Custom toggle switch built with HTML/Tailwind. Interaction: 'click' event toggles state. Justification: More intuitive and faster than a dropdown for a binary choice. Library/Method: HTML/Tailwind/JS.
-        - Report Info: Dynamic result display. Goal: Show conversion result or errors. Viz/Method: Styled <div> with large text. Interaction: Text and color are updated dynamically by JS based on calculation outcome. Justification: Prominent feedback is crucial for a calculator-style app. Color coding (green/red) provides instant validation. Library/Method: JS.
-        - Report Info: Rate helper text. Goal: Provide context for the rate. Viz/Method: A simple <p> tag. Interaction: Content updates in real-time as user types the rate. Justification: Adds value and clarity to the primary input field. Library/Method: JS.
-        - Report Info: Number Formatting. Goal: Improve readability of numbers. Viz/Method: Text formatting within inputs and result. Interaction: Applied automatically via JS. Justification: Essential for usability with large currency numbers. Library/Method: JS Intl.NumberFormat.
+        - Report Info: Core conversion inputs (rate, amount). Goal: User input. Viz/Method: HTML <input> fields. Interaction: Real-time calculation on 'input' event, debounced for performance. New: 'blur' event on rate input standardizes low values. Justification: Standard input fields are intuitive; the blur event adds a layer of intelligent validation without disrupting the user's flow. Library/Method: Vanilla JS.
+        - Report Info: Conversion direction toggle. Goal: Switch between MMK->THB and THB->MMK. Viz/Method: Custom toggle switch built with HTML/Tailwind. Interaction: 'click' event with smooth transition. Justification: Fast, intuitive binary choice. Library/Method: HTML/Tailwind/JS.
+        - Report Info: Dynamic result display. Goal: Show conversion result or errors. Viz/Method: Styled <div> with large text. Interaction: Text and color are updated dynamically by JS. New: Added a subtle scale animation on appearance. Justification: Prominent, animated feedback improves user experience. Library/Method: JS/CSS.
+        - Report Info: Live Time Display. Goal: Provide current time context. Viz/Method: Styled <p> tag in the header. Interaction: Updates every second. Justification: Adds a professional, "live" feel to the financial tool. Library/Method: JS.
     -->
     <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
     <style>
@@ -38,49 +37,52 @@
         <header class="text-center mb-6">
             <h1 class="text-3xl font-bold text-[#1A237E]">SCI Currency Converter</h1>
             <p class="text-md text-[#3F51B5]">Myanmar Kyat (MMK) & Thai Baht (THB)</p>
+            <p id="live-clock" class="text-xs text-gray-500 mt-2 h-4"></p>
         </header>
-
-        <div id="converter-card" class="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg p-6 md:p-8">
-            
-            <div class="space-y-6">
-                <!-- Rate Input -->
-                <div>
-                    <label for="rate-input" class="block text-sm font-medium text-gray-700 mb-1">Exchange Rate</label>
-                    <div class="relative">
-                         <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                            <span class="text-gray-500 sm:text-sm">📈</span>
+        
+        <div class="p-1 bg-gradient-to-br from-indigo-200 via-purple-200 to-pink-200 rounded-2xl shadow-lg">
+             <div id="converter-card" class="bg-white/80 backdrop-blur-sm rounded-xl p-6 md:p-8">
+                <div class="space-y-6">
+                    <!-- Rate Input -->
+                    <div>
+                        <label for="rate-input" class="block text-sm font-medium text-gray-700 mb-1">Exchange Rate</label>
+                        <div class="relative">
+                            <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                                <span class="text-gray-500 sm:text-sm">📈</span>
+                            </div>
+                            <input type="text" id="rate-input" inputmode="decimal" class="w-full pl-10 pr-12 py-3 rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/20 transition-all duration-300 text-lg" placeholder="0.00">
+                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+                                <span class="text-gray-500 sm:text-sm">THB</span>
+                            </div>
                         </div>
-                        <input type="text" id="rate-input" inputmode="decimal" class="w-full pl-10 pr-12 py-3 rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-lg" placeholder="0.00">
-                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
-                            <span class="text-gray-500 sm:text-sm">THB</span>
+                        <p id="rate-helper" class="text-xs text-gray-500 mt-2 ml-1 h-4">Rate for 100,000 MMK</p>
+                    </div>
+                    
+                    <!-- Toggle Switch -->
+                    <div class="flex items-center justify-center">
+                        <div class="flex items-center bg-indigo-100 rounded-full p-1">
+                            <button id="toggle-mmk-thb" class="px-6 py-2 text-sm font-semibold rounded-full bg-indigo-600 text-white transition-all duration-300">MMK → THB</button>
+                            <button id="toggle-thb-mmk" class="px-6 py-2 text-sm font-semibold rounded-full text-indigo-600 transition-all duration-300">THB → MMK</button>
                         </div>
                     </div>
-                    <p id="rate-helper" class="text-xs text-gray-500 mt-2 ml-1 h-4">Rate for 100,000 MMK</p>
-                </div>
-                
-                <!-- Toggle Switch -->
-                <div class="flex items-center justify-center">
-                    <div id="conversion-toggle" class="flex items-center bg-indigo-100 rounded-full p-1 cursor-pointer">
-                        <button id="toggle-mmk-thb" class="px-6 py-2 text-sm font-semibold rounded-full bg-indigo-600 text-white">MMK → THB</button>
-                        <button id="toggle-thb-mmk" class="px-6 py-2 text-sm font-semibold rounded-full text-indigo-600">THB → MMK</button>
-                    </div>
-                </div>
 
-                <!-- Amount Input -->
-                <div>
-                    <label for="amount-input" class="block text-sm font-medium text-gray-700 mb-1">Amount to Convert</label>
-                    <div class="relative">
-                        <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                            <span id="amount-prefix" class="text-gray-500 font-semibold sm:text-sm">MMK</span>
+                    <!-- Amount Input -->
+                    <div>
+                        <label for="amount-input" class="block text-sm font-medium text-gray-700 mb-1">Amount to Convert</label>
+                        <div class="relative">
+                            <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                                <span id="amount-prefix" class="text-gray-500 font-semibold sm:text-sm">MMK</span>
+                            </div>
+                            <input type="text" id="amount-input" inputmode="decimal" class="w-full pl-14 pr-4 py-3 rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/20 transition-all duration-300 text-lg" placeholder="0.00">
                         </div>
-                        <input type="text" id="amount-input" inputmode="decimal" class="w-full pl-14 pr-4 py-3 rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-lg" placeholder="0.00">
                     </div>
                 </div>
             </div>
         </div>
 
+
         <!-- Result Display -->
-        <div id="result-container" class="mt-6 text-center transition-opacity duration-300 opacity-0">
+        <div id="result-container" class="mt-6 text-center transition-all duration-500 opacity-0 transform scale-95">
              <div class="bg-white/60 backdrop-blur-sm rounded-2xl shadow-md p-6">
                 <p class="text-sm font-medium text-indigo-800 mb-1">Result</p>
                 <p id="result-text" class="text-4xl font-bold text-indigo-800 break-words">฿ 0.00</p>
@@ -89,9 +91,37 @@
         
         <!-- Clear Button -->
         <div class="mt-6 text-center">
-            <button id="clear-button" class="text-sm font-semibold text-indigo-500 hover:text-indigo-700">Clear All</button>
+            <button id="clear-button" class="text-sm font-semibold text-indigo-500 hover:text-indigo-700 transition-colors">Clear All</button>
         </div>
 
+        <footer class="mt-8 text-center space-y-4">
+            <!-- NEW: Profile Picture -->
+            <div class="flex justify-center">
+                <img src="https://scontent.fbkk5-5.fna.fbcdn.net/v/t39.30808-6/491956894_4002848323330435_1544802096899750033_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=6ee11a&_nc_eui2=AeG6Bj5OIk4Hd2JtlhOqo0VMEfsFDbnmfgAR-wUNueZ-AF6yDs-BV9BMiWkQObCQdx6DfH6fJ1CPGc8JKFETR5R5&_nc_ohc=we3Ij2vFC4wQ7kNvwHvsKr0&_nc_oc=AdmqO9ORPcQ3ema7I9oPQJC5EVRYxHtF-WCJqysf4PsG3uEp22aYQdM7Gxx-OZkNUXYHatWHzB50I6kXqCiuwe-Q&_nc_zt=23&_nc_ht=scontent.fbkk5-5.fna&_nc_gid=Jkluv5CCtIsv-90qS_IHqg&oh=00_AfOlUeU5_pSZXCmETqXryEqIA2Qz2PUPxjPgmsP7fXHWgw&oe=68574659"   
+                    <!-- https://placehold.co/64x64/E1F5FE/1A237E?text=SCI -->
+                     alt="Profile Picture" 
+                     class="w-16 h-16 rounded-full border-2 border-white shadow-lg"
+                     onerror="this.onerror=null;this.src='https://placehold.co/64x64/E1F5FE/1A237E?text=Error';">
+            </div>
+
+             <!-- Feedback Button -->
+             <div>
+                 <a href="https://www.facebook.com/skycreationinnovations" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 bg-blue-500 text-white text-sm font-semibold px-4 py-2 rounded-full shadow-md hover:bg-blue-600 transition-colors">
+                     <span>💬</span>
+                     <span>Send Feedback</span>
+                 </a>
+            </div>
+            
+            <!-- Copyright info -->
+            <div class="border-t border-gray-300/60 pt-4 mt-4">
+                <p class="text-xs text-gray-500">
+                    Copyright © 2025 Sky Creation Innovation. All Rights Reserved.
+                </p>
+                <p class="text-xs text-gray-400">
+                    Web application adapted from the original Flutter concept.
+                </p>
+            </div>
+        </footer>
     </main>
 
     <script>
@@ -105,11 +135,12 @@
             const toggleMmktThb = document.getElementById('toggle-mmk-thb');
             const toggleThbMmk = document.getElementById('toggle-thb-mmk');
             const clearButton = document.getElementById('clear-button');
+            const liveClock = document.getElementById('live-clock');
 
             let state = {
                 rate: 0,
                 amount: 0,
-                convertToBaht: true, // true: MMK -> THB, false: THB -> MMK
+                convertToBaht: true,
             };
             
             let debounceTimer;
@@ -117,9 +148,22 @@
             const numberFormatter = new Intl.NumberFormat('en-US', {
                 maximumFractionDigits: 3
             });
+            const commaFormatter = new Intl.NumberFormat('en-US', {
+                maximumFractionDigits: 3,
+                style: 'decimal'
+            });
+
+            function updateClock() {
+                const now = new Date();
+                const options = {
+                    timeZone: 'Asia/Bangkok',
+                    year: 'numeric', month: 'long', day: 'numeric',
+                    hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true
+                };
+                liveClock.textContent = `Bangkok: ${now.toLocaleString('en-US', options)}`;
+            }
 
             function updateUI() {
-                // Toggle styles
                 if (state.convertToBaht) {
                     toggleMmktThb.classList.add('bg-indigo-600', 'text-white');
                     toggleMmktThb.classList.remove('text-indigo-600');
@@ -133,14 +177,6 @@
                     toggleMmktThb.classList.add('text-indigo-600');
                     amountPrefix.textContent = '฿';
                 }
-
-                // Rate helper text
-                if (state.rate > 0) {
-                    const mmkPerBaht = 100000 / state.rate;
-                    rateHelper.textContent = `(1 THB ≈ ${numberFormatter.format(mmkPerBaht)} MMK)`;
-                } else {
-                    rateHelper.textContent = 'Rate for 100,000 MMK';
-                }
             }
 
             function calculateAndDisplay() {
@@ -150,10 +186,19 @@
                 state.rate = parseFloat(rateStr) || 0;
                 state.amount = parseFloat(amountStr) || 0;
                 
-                updateUI();
-
+                if (state.rate > 0) {
+                    const mmkPerBaht = 100000 / state.rate;
+                    rateHelper.textContent = `(1 THB ≈ ${numberFormatter.format(mmkPerBaht)} MMK)`;
+                } else {
+                    rateHelper.textContent = 'Rate for 100,000 MMK';
+                }
+                
                 if (state.rate <= 0) {
-                    displayResult('Please enter a valid exchange rate', 'error');
+                    if (document.activeElement === rateInput && rateInput.value) {
+                         displayResult('Please enter a valid exchange rate', 'error');
+                    } else {
+                        displayResult('', 'default');
+                    }
                     return;
                 }
                 if (state.amount <= 0) {
@@ -166,10 +211,10 @@
                     let resultString = '';
                     if (state.convertToBaht) {
                         result = (state.amount / 100000) * state.rate;
-                        resultString = `฿ ${numberFormatter.format(result)}`;
+                        resultString = `฿ ${commaFormatter.format(result)}`;
                     } else {
                         result = (state.amount / state.rate) * 100000;
-                        resultString = `MMK ${numberFormatter.format(result)}`;
+                        resultString = `MMK ${commaFormatter.format(result)}`;
                     }
                     displayResult(resultString, 'success');
                 } catch(e) {
@@ -179,24 +224,18 @@
 
             function displayResult(text, type) {
                 if (!text) {
-                    resultContainer.classList.add('opacity-0');
+                    resultContainer.classList.add('opacity-0', 'scale-95');
                     return;
                 }
                 
-                resultContainer.classList.remove('opacity-0');
+                resultContainer.classList.remove('opacity-0', 'scale-95');
                 resultText.textContent = text;
-                
                 resultText.classList.remove('text-red-500', 'text-green-600', 'text-indigo-800');
                 
                 switch(type) {
-                    case 'error':
-                        resultText.classList.add('text-red-500');
-                        break;
-                    case 'success':
-                        resultText.classList.add('text-green-600');
-                        break;
-                    default:
-                        resultText.classList.add('text-indigo-800');
+                    case 'error': resultText.classList.add('text-red-500'); break;
+                    case 'success': resultText.classList.add('text-green-600'); break;
+                    default: resultText.classList.add('text-indigo-800');
                 }
             }
             
@@ -206,54 +245,48 @@
                 const selectionStart = input.selectionStart;
                 const originalLength = value.length;
 
-                // Allow only numbers and one decimal point
-                value = value.replace(/[^0-9.]/g, '');
+                value = value.replace(/[^\d.]/g, '');
                 const parts = value.split('.');
-                if (parts.length > 2) {
-                    value = parts[0] + '.' + parts.slice(1).join('');
-                }
+                let integerPart = parts[0];
+                let decimalPart = parts.length > 1 ? `.${parts[1].substring(0,3)}` : (value.endsWith('.') ? '.' : '');
+                
+                let formattedInteger = integerPart.replace(/,/g, '').replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                if (formattedInteger === '0' && decimalPart === '') formattedInteger = '';
+                
+                input.value = formattedInteger + decimalPart;
 
-                // Format integer part with commas
-                const [integerPart, decimalPart] = value.split('.');
-                const formattedInteger = numberFormatter.format(parseInt(integerPart.replace(/,/g, ''), 10) || 0).split('.')[0];
-                
-                let formattedValue = formattedInteger;
-                if (decimalPart !== undefined) {
-                    formattedValue += '.' + decimalPart.substring(0, 3);
-                } else if (value.endsWith('.')) {
-                    formattedValue += '.';
+                const cursorOffset = input.value.length - originalLength;
+                if(selectionStart > 0) {
+                   const newCursorPos = Math.max(0, selectionStart + cursorOffset);
+                   input.setSelectionRange(newCursorPos, newCursorPos);
                 }
-                
-                input.value = formattedValue;
-                
-                // Adjust cursor position
-                const newLength = input.value.length;
-                const newSelection = selectionStart + (newLength - originalLength);
-                if (selectionStart > 0 && newLength > originalLength) {
-                    input.setSelectionRange(newSelection, newSelection);
+            }
+            
+            function standardizeRate() {
+                const rate = parseFloat(rateInput.value.replace(/,/g, '')) || 0;
+                if (rate > 0 && rate < 500) {
+                    const standardRate = 100000 / rate;
+                    rateInput.value = commaFormatter.format(standardRate);
+                    calculateAndDisplay();
                 }
             }
 
-
             const debouncedCalculate = () => {
                 clearTimeout(debounceTimer);
-                debounceTimer = setTimeout(calculateAndDisplay, 250);
+                debounceTimer = setTimeout(calculateAndDisplay, 300);
             };
 
-            // Event Listeners
-            rateInput.addEventListener('input', (e) => {
-                formatInput(e);
-                debouncedCalculate();
-            });
-            
-            amountInput.addEventListener('input', (e) => {
-                formatInput(e);
-                debouncedCalculate();
-            });
+            rateInput.addEventListener('input', formatInput);
+            rateInput.addEventListener('keyup', debouncedCalculate);
+            rateInput.addEventListener('blur', standardizeRate);
+
+            amountInput.addEventListener('input', formatInput);
+            amountInput.addEventListener('keyup', debouncedCalculate);
             
             toggleMmktThb.addEventListener('click', () => {
                 if (!state.convertToBaht) {
                     state.convertToBaht = true;
+                    updateUI();
                     calculateAndDisplay();
                 }
             });
@@ -261,6 +294,7 @@
             toggleThbMmk.addEventListener('click', () => {
                 if (state.convertToBaht) {
                     state.convertToBaht = false;
+                    updateUI();
                     calculateAndDisplay();
                 }
             });
@@ -274,7 +308,8 @@
                 rateInput.focus();
             });
 
-            // Initial UI setup
+            updateClock();
+            setInterval(updateClock, 1000);
             updateUI();
         });
     </script>
