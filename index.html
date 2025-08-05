@@ -8,21 +8,6 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <!-- 
-        Chosen Palette: "Indigo Dream" - Adapted from the Flutter app's AppColors.
-        Primary: Indigo (#1A237E), Success: Green (#4CAF50), Background: Lavender to Cyan Gradient (#F3E5F5 to #E1F5FE).
-    -->
-    <!-- 
-        Application Structure Plan: A single-view, task-oriented application. The structure is designed to mimic the simplicity and directness of a calculator, focusing the user entirely on the conversion task. It uses a central card layout to group all interactive elements (inputs, toggles), with a clear result display below. This single-column, top-to-bottom flow is highly intuitive on both desktop and mobile, eliminating the need for navigation and ensuring immediate usability. A "Clear" button provides a simple reset action. Enhancements include a live clock, animated UI elements, and automatic rate standardization for a more robust user experience.
-    -->
-    <!-- 
-        Visualization & Content Choices:
-        - Report Info: Core conversion inputs (rate, amount). Goal: User input. Viz/Method: HTML <input> fields. Interaction: Real-time calculation on 'input' event, debounced for performance. New: 'blur' event on rate input standardizes low values. Justification: Standard input fields are intuitive; the blur event adds a layer of intelligent validation without disrupting the user's flow. Library/Method: Vanilla JS.
-        - Report Info: Conversion direction toggle. Goal: Switch between MMK->THB and THB->MMK. Viz/Method: Custom toggle switch built with HTML/Tailwind. Interaction: 'click' event with smooth transition. Justification: Fast, intuitive binary choice. Library/Method: HTML/Tailwind/JS.
-        - Report Info: Dynamic result display. Goal: Show conversion result or errors. Viz/Method: Styled <div> with large text. Interaction: Text and color are updated dynamically by JS. New: Added a subtle scale animation on appearance. Justification: Prominent, animated feedback improves user experience. Library/Method: JS/CSS.
-        - Report Info: Live Time Display. Goal: Provide current time context. Viz/Method: Styled <p> tag in the header. Interaction: Updates every second. Justification: Adds a professional, "live" feel to the financial tool. Library/Method: JS.
-    -->
-    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
     <style>
         body {
             font-family: 'Inter', sans-serif;
@@ -43,7 +28,6 @@
         <div class="p-1 bg-gradient-to-br from-indigo-200 via-purple-200 to-pink-200 rounded-2xl shadow-lg">
              <div id="converter-card" class="bg-white/80 backdrop-blur-sm rounded-xl p-6 md:p-8">
                 <div class="space-y-6">
-                    <!-- Rate Input -->
                     <div>
                         <label for="rate-input" class="block text-sm font-medium text-gray-700 mb-1">Exchange Rate</label>
                         <div class="relative">
@@ -58,7 +42,6 @@
                         <p id="rate-helper" class="text-xs text-gray-500 mt-2 ml-1 h-4">Rate for 100,000 MMK</p>
                     </div>
                     
-                    <!-- Toggle Switch -->
                     <div class="flex items-center justify-center">
                         <div class="flex items-center bg-indigo-100 rounded-full p-1">
                             <button id="toggle-mmk-thb" class="px-6 py-2 text-sm font-semibold rounded-full bg-indigo-600 text-white transition-all duration-300">MMK → THB</button>
@@ -66,7 +49,6 @@
                         </div>
                     </div>
 
-                    <!-- Amount Input -->
                     <div>
                         <label for="amount-input" class="block text-sm font-medium text-gray-700 mb-1">Amount to Convert</label>
                         <div class="relative">
@@ -80,43 +62,46 @@
             </div>
         </div>
 
-        <!-- Result Display -->
         <div id="result-container" class="mt-6 text-center transition-all duration-500 opacity-0 transform scale-95">
              <div class="bg-white/60 backdrop-blur-sm rounded-2xl shadow-md p-6">
-                <p class="text-sm font-medium text-indigo-800 mb-1">Result</p>
+                <div class="flex justify-between items-center mb-1">
+                    <p class="text-sm font-medium text-indigo-800">Result</p>
+                    <button id="copy-button" class="text-xs font-semibold text-indigo-500 hover:text-indigo-700 transition-colors px-2 py-1 rounded-md hover:bg-indigo-100/80 disabled:opacity-50 disabled:cursor-not-allowed">
+                        <span>📋</span> Copy
+                    </button>
+                </div>
                 <p id="result-text" class="text-4xl font-bold text-indigo-800 break-words">฿ 0.00</p>
              </div>
         </div>
         
-        <!-- Clear Button -->
         <div class="mt-6 text-center">
             <button id="clear-button" class="text-sm font-semibold text-indigo-500 hover:text-indigo-700 transition-colors">Clear All</button>
         </div>
 
        <footer class="mt-8 text-center space-y-4">
-    <div class="flex justify-center">
-        <img src="images/profile-picture.jpg" 
-             alt="Profile Picture of the developer" 
-             class="w-16 h-16 rounded-full border-2 border-white shadow-lg"
-             onerror="this.onerror=null;this.src='https://placehold.co/64x64/E1F5FE/1A237E?text=SCI';">
-    </div>
+            <div class="flex justify-center">
+                <img src="images/profile-picture.jpg" 
+                     alt="Profile Picture of the developer" 
+                     class="w-16 h-16 rounded-full border-2 border-white shadow-lg"
+                     onerror="this.onerror=null;this.src='https://placehold.co/64x64/E1F5FE/1A237E?text=SCI';">
+            </div>
 
-     <div>
-         <a href="https://www.facebook.com/skycreationinnovations" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 bg-blue-500 text-white text-sm font-semibold px-4 py-2 rounded-full shadow-md hover:bg-blue-600 transition-colors">
-             <span>💬</span>
-             <span>Send Feedback</span>
-         </a>
-     </div>
-    
-     <div class="border-t border-gray-300/60 pt-4 mt-4">
-         <p class="text-xs text-gray-500">
-             Copyright © 2025 Sky Creation Innovation. All Rights Reserved.
-         </p>
-         <p class="text-xs text-gray-400">
-             Web application adapted from the original Flutter concept.
-         </p>
-     </div>
-</footer>
+           <div>
+               <a href="https://www.facebook.com/skycreationinnovations" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 bg-blue-500 text-white text-sm font-semibold px-4 py-2 rounded-full shadow-md hover:bg-blue-600 transition-colors">
+                   <span>💬</span>
+                   <span>Send Feedback</span>
+               </a>
+           </div>
+        
+           <div class="border-t border-gray-300/60 pt-4 mt-4">
+               <p class="text-xs text-gray-500">
+                   Copyright © 2025 Sky Creation Innovation. All Rights Reserved.
+               </p>
+               <p class="text-xs text-gray-400">
+                   Web application adapted from the original Flutter concept.
+               </p>
+           </div>
+        </footer>
     </main>
 
     <script>
@@ -152,6 +137,7 @@
             const toggleThbMmk = document.getElementById('toggle-thb-mmk');
             const clearButton = document.getElementById('clear-button');
             const liveClock = document.getElementById('live-clock');
+            const copyButton = document.getElementById('copy-button'); // MODIFICATION: Get copy button
 
             let state = {
                 rate: 0,
@@ -213,7 +199,7 @@
                     if (document.activeElement === rateInput && rateInput.value) {
                          displayResult('Please enter a valid exchange rate', 'error');
                     } else {
-                        displayResult('', 'default');
+                         displayResult('', 'default');
                     }
                     return;
                 }
@@ -324,6 +310,62 @@
                 rateInput.focus();
             });
 
+            // MODIFICATION START: Added copy function and event listener
+            function handleCopy() {
+                if (!state.rate || !state.amount) {
+                    return; // Don't copy if there's no valid result
+                }
+
+                const now = new Date();
+                const timestampOptions = {
+                    timeZone: 'Asia/Bangkok',
+                    year: 'numeric', month: 'long', day: 'numeric',
+                    hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true
+                };
+                const timestamp = now.toLocaleString('en-US', timestampOptions);
+                
+                const rateFor100kMMK = state.rate;
+                const rateFor1THB = 100000 / state.rate;
+                
+                const direction = state.convertToBaht ? 'MMK → THB' : 'THB → MMK';
+                const inputCurrency = state.convertToBaht ? 'MMK' : 'THB';
+                const inputAmount = commaFormatter.format(state.amount);
+
+                const resultString = resultText.textContent;
+
+                const textToCopy = `SCI Currency Converter | MMK ⇔ THB
+-------------------------------------
+Conversion Time: ${timestamp}
+
+Exchange Rate:
+- 100,000 MMK = ${commaFormatter.format(rateFor100kMMK)} THB
+- 1 THB = ${numberFormatter.format(rateFor1THB)} MMK
+
+Conversion Details:
+Direction: ${direction}
+Amount: ${inputAmount} ${inputCurrency}
+Result: ${resultString}
+-------------------------------------
+Generated via: https://sciexchange.netlify.app/`;
+
+                navigator.clipboard.writeText(textToCopy).then(() => {
+                    const originalButtonHTML = copyButton.innerHTML;
+                    copyButton.innerHTML = `<span>✅</span> Copied!`;
+                    copyButton.disabled = true;
+                    setTimeout(() => {
+                        copyButton.innerHTML = originalButtonHTML;
+                        copyButton.disabled = false;
+                    }, 2000);
+                }).catch(err => {
+                    console.error('Failed to copy text: ', err);
+                    alert('Failed to copy text.');
+                });
+            }
+
+            copyButton.addEventListener('click', handleCopy);
+            // MODIFICATION END
+
+            // Initial setup
             updateClock();
             setInterval(updateClock, 1000);
             updateUI();
