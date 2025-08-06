@@ -27,11 +27,6 @@
             to { transform: perspective(400px) rotateX(0deg); opacity: 1; }
         }
         
-        @keyframes marquee {
-            0% { transform: translateX(100%); }
-            100% { transform: translateX(-100%); }
-        }
-
         /* Animation for when the rate updates */
         @keyframes pulse-bg {
             0%, 100% { background-color: #EEF2FF; } /* bg-indigo-50 */
@@ -67,12 +62,6 @@
             transition: transform 0.1s ease-in-out;
         }
 
-        .marquee-text {
-            display: inline-block;
-            white-space: nowrap;
-            padding-left: 100%;
-            animation: marquee 75s linear infinite;
-        }
     </style>
 </head>
 <body class="min-h-screen w-full flex items-center justify-center p-4 relative">
@@ -87,15 +76,14 @@
             <p id="live-clock" class="text-xs text-gray-500 mt-2 h-4"></p>
         </header>
 
-        <div class="mt-8 overflow-hidden">
-            <p class="marquee-text text-xs text-indigo-800/100 font-medium">
-                If you're interested in adding a feature like this or creating a website for your business, feel free to contact us by clicking 'Send Feedback'. ဒီလိုပုံစံတစ်ခုထည့်ချင်တာဖြစ်စေ၊ သင့်စီးပွားရေးဝက်ဘ်ဆိုဒ်တစ်ခုတည်ဆောက်ချင်တာဖြစ်စေ၊ 'Send Feedback' ကိုနှိပ်ပြီး ဆက်သွယ်နိုင်ပါတယ်။
-                <span class="mx-12">|</span>
-                If you're interested in adding a feature like this or creating a website for your business, feel free to contact us by clicking 'Send Feedback'. ဒီလိုပုံစံတစ်ခုထည့်ချင်တာဖြစ်စေ၊ သင့်စီးပွားရေးဝက်ဘ်ဆိုဒ်တစ်ခုတည်ဆောက်ချင်တာဖြစ်စေ၊ 'Send Feedback' ကိုနှိပ်ပြီး ဆက်သွယ်နိုင်ပါတယ်။
-            </p>
+        <div class="mt-8 text-center text-xs text-indigo-800/100 font-medium">
+            <p>
+                If you're interested in adding a feature like this or creating a website for your business, feel free to contact us by clicking 'Send Feedback'. </p>
+             <p>   ဒီလိုပုံစံတစ်ခုထည့်ချင်တာဖြစ်စေ၊ သင့်စီးပွားရေးဝက်ဘ်ဆိုဒ်တစ်ခုတည်ဆောက်ချင်တာဖြစ်စေ၊ 'Send Feedback' ကိုနှိပ်ပြီး ဆက်သွယ်နိုင်ပါတယ်။ </p>
+            
         </div>
         
-        <div class="p-1 bg-gradient-to-br from-indigo-200 via-purple-200 to-pink-200 rounded-2xl shadow-2xl relative">
+        <div class="p-1 bg-gradient-to-br from-indigo-200 via-purple-200 to-pink-200 rounded-2xl shadow-2xl relative mt-4">
             
             <button id="clear-button" class="absolute -top-3 -right-3 z-20 bg-red-500 hover:bg-red-600 text-white w-10 h-10 rounded-full flex items-center justify-center shadow-lg transition-transform hover:scale-110 button-press-effect" title="Clear All" aria-label="Clear all inputs">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -176,11 +164,12 @@
 
        <footer class="mt-8 text-center space-y-4">
             <div class="flex justify-center">
-                <img src="https://placehold.co/64x64/E1F5FE/1A237E?text=SCI" 
-                     alt="Sky Creation Innovations Logo" 
-                     class="w-16 h-16 rounded-full border-2 border-white shadow-lg">
+                <img src="images/profile-picture.jpg" 
+                     alt="Profile Picture of the developer" 
+                     class="w-16 h-16 rounded-full border-2 border-white shadow-lg"
+                     onerror="this.onerror=null;this.src='https://placehold.co/64x64/E1F5FE/1A237E?text=SCI';">
             </div>
-
+           
             <div>
                <a href="https://www.facebook.com/skycreationinnovations" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 bg-blue-500 text-white text-sm font-semibold px-4 py-2 rounded-full shadow-md hover:bg-blue-600 transition-colors button-press-effect">
                    <span>💬</span>
