@@ -192,11 +192,9 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             // --- Configuration ---
-            // STABILITY FIX: Switched from public CSV to Google Sheets API for real-time data.
-            // TODO: Replace with your actual API Key and Spreadsheet ID.
-            const API_KEY = 'AIzaSyAk_CEoOq2dpUS2FHj8om6lC8MfD-XyaSM'; // <--- PASTE YOUR API KEY HERE
-            const SPREADSHEET_ID = '1Rr7DCKr0wS2h3CUaLId4txrwOAJ14CM4muzwwJ-IIudIfCo'; // <--- PASTE YOUR SPREADSHEET ID HERE
-            const RANGE = 'Sheet1!A1:B1'; // Assumes rates are in the first two cells of Sheet1
+            const API_KEY = 'AIzaSyAk_CEoOq2dpUS2FHj8om6lC8MfD-XyaSM'; 
+            const SPREADSHEET_ID = '1Rr7DCKr0wS2h3CUaLId4txrwOAJ14CM4muzwwJ-IIudIfCo'; 
+            const RANGE = 'Sheet1!A1:B1'; 
 
             const API_URL = `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${RANGE}?key=${API_KEY}`;
 
@@ -270,7 +268,8 @@
             }
 
             async function fetchAndUpdateRate(isManualRefresh = false) {
-                if (API_KEY === 'AIzaSyAk_CEoOq2dpUS2FHj8om6lC8MfD-XyaSM') {
+                // LOGIC FIX: This check now correctly looks for a placeholder value, not your actual key.
+                if (API_KEY === 'YOUR_API_KEY_HERE' || !API_KEY) {
                     setAdminRateText('API Key Needed');
                     console.error("API Key is missing. Please add it to the script.");
                     return;
