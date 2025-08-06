@@ -193,6 +193,7 @@
         document.addEventListener('DOMContentLoaded', () => {
             // --- Configuration ---
             const API_KEY = 'AIzaSyAk_CEoOq2dpUS2FHj8om6lC8MfD-XyaSM'; 
+            // BUG FIX: Updated with the correct SPREADSHEET_ID provided by the user.
             const SPREADSHEET_ID = '1vI0Ip4--bTwoyWa7TZRyxG9YqYx-YqRnBMaBjo1d3KA'; 
             const RANGE = 'Sheet1!A1:B1'; 
 
@@ -268,7 +269,6 @@
             }
 
             async function fetchAndUpdateRate(isManualRefresh = false) {
-                // LOGIC FIX: This check now correctly looks for a placeholder value, not your actual key.
                 if (API_KEY === 'YOUR_API_KEY_HERE' || !API_KEY) {
                     setAdminRateText('API Key Needed');
                     console.error("API Key is missing. Please add it to the script.");
@@ -281,7 +281,11 @@
                 
                 try {
                     const response = await fetch(API_URL);
-                    if (!response.ok) throw new Error(`API request failed: ${response.statusText}`);
+                    if (!response.ok) {
+                        const errorBody = await response.json();
+                        console.error("API Error Response:", errorBody);
+                        throw new Error(`API request failed: ${response.status} ${response.statusText}`);
+                    }
                     
                     const data = await response.json();
                     
