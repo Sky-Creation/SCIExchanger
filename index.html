@@ -12,6 +12,7 @@
         body {
             font-family: 'Inter', sans-serif;
             background-color: #F3E5F5;
+            /* A smoother gradient for the background */
             background-image: linear-gradient(to bottom, #F3E5F5, #E1F5FE);
             overflow-x: hidden; 
         }
@@ -19,7 +20,7 @@
         /* --- Keyframe Animations --- */
         @keyframes float {
             0% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-30px) rotate(180deg); }
+            50% { transform: translateY(-25px) rotate(180deg); }
             100% { transform: translateY(0px) rotate(360deg); }
         }
 
@@ -36,7 +37,7 @@
         .animated-shape {
             position: absolute;
             z-index: 0;
-            opacity: 0.7;
+            opacity: 0.6;
             animation: float 15s ease-in-out infinite;
         }
 
@@ -61,8 +62,9 @@
         .marquee-text {
             display: inline-block;
             white-space: nowrap;
-            padding-left: 100%;
-            animation: marquee 35s linear infinite;
+            padding-left: 70%;
+            /* UX Fix: Slowed down animation significantly to make it less distracting */
+            animation: marquee 60s linear infinite;
         }
     </style>
 </head>
@@ -79,15 +81,18 @@
             <p id="live-clock" class="text-xs text-gray-500 mt-2 h-4"></p>
         </header>
 
-         <div class="mt-8 overflow-hidden">
-            <p class="marquee-text text-xs text-indigo-300/80 font-medium">
+        <div class="mt-8 overflow-hidden">
+            <!-- UX Fix: Lengthened the marquee text to make the loop less noticeable. -->
+            <p class="marquee-text text-xs text-indigo-800/100 font-medium">
+                If you're interested in adding a feature like this or creating a website for your business, feel free to contact us by clicking 'Send Feedback'. ဒီလိုပုံစံတစ်ခုထည့်ချင်တာဖြစ်စေ၊ သင့်စီးပွားရေးဝက်ဘ်ဆိုဒ်တစ်ခုတည်ဆောက်ချင်တာဖြစ်စေ၊ 'Send Feedback' ကိုနှိပ်ပြီး ဆက်သွယ်နိုင်ပါတယ်။
+                <span class="mx-12">|</span>
                 If you're interested in adding a feature like this or creating a website for your business, feel free to contact us by clicking 'Send Feedback'. ဒီလိုပုံစံတစ်ခုထည့်ချင်တာဖြစ်စေ၊ သင့်စီးပွားရေးဝက်ဘ်ဆိုဒ်တစ်ခုတည်ဆောက်ချင်တာဖြစ်စေ၊ 'Send Feedback' ကိုနှိပ်ပြီး ဆက်သွယ်နိုင်ပါတယ်။
             </p>
         </div>
         
         <div class="p-1 bg-gradient-to-br from-indigo-200 via-purple-200 to-pink-200 rounded-2xl shadow-2xl relative">
             
-            <button id="clear-button" class="absolute -top-3 -right-3 z-20 bg-red-500 hover:bg-red-600 text-white w-10 h-10 rounded-full flex items-center justify-center shadow-lg transition-transform hover:scale-110 button-press-effect" title="Clear All">
+            <button id="clear-button" class="absolute -top-3 -right-3 z-20 bg-red-500 hover:bg-red-600 text-white w-10 h-10 rounded-full flex items-center justify-center shadow-lg transition-transform hover:scale-110 button-press-effect" title="Clear All" aria-label="Clear all inputs">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                 </svg>
@@ -97,25 +102,27 @@
                  <!-- Official Rate Display for both rates -->
                 <div id="official-rate-container" class="mb-6 p-4 bg-indigo-50 rounded-lg text-center">
                     <div class="flex items-center justify-between mb-3">
-                         <p class="text-xs font-medium text-indigo-500 flex items-center gap-2">
+                        <p class="text-xs font-medium text-indigo-500 flex items-center gap-2">
                             <span class="relative flex h-2 w-2">
                                 <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
                                 <span class="relative inline-flex rounded-full h-2 w-2 bg-indigo-500"></span>
                             </span>
                             Official Rates
                         </p>
-                        <button id="refresh-rate-btn" class="text-indigo-500 hover:text-indigo-800 transition-transform hover:rotate-180 button-press-effect">🔄</button>
+                        <button id="refresh-rate-btn" class="text-indigo-500 hover:text-indigo-800 transition-transform hover:rotate-180 button-press-effect" aria-label="Refresh official rates">🔄</button>
                     </div>
                     <div class="grid grid-cols-2 divide-x divide-indigo-200">
                         <div class="px-2 text-center">
                             <p class="text-sm text-indigo-600">MMK → THB</p>
                             <p class="text-md font-bold text-indigo-800"><span id="admin-rate-mmk-thb">Fetching...</span></p>
-                            <p class="text-xs text-indigo-400">for 100,000 MMK</p>
+                            <!-- UX Fix: Improved color contrast for accessibility -->
+                            <p class="text-xs text-indigo-500">for 100,000 MMK</p>
                         </div>
                         <div class="px-2 text-center">
                              <p class="text-sm text-indigo-600">THB → MMK</p>
                             <p class="text-md font-bold text-indigo-800"><span id="admin-rate-thb-mmk">Fetching...</span></p>
-                            <p class="text-xs text-indigo-400">for 100,000 MMK</p>
+                            <!-- UX Fix: Improved color contrast for accessibility -->
+                            <p class="text-xs text-indigo-500">for 100,000 MMK</p>
                         </div>
                     </div>
                 </div>
@@ -167,10 +174,10 @@
 
        <footer class="mt-8 text-center space-y-4">
             <div class="flex justify-center">
-                <img src="images/profile-picture.jpg" 
-                     alt="Profile Picture of the developer" 
-                     class="w-16 h-16 rounded-full border-2 border-white shadow-lg"
-                     onerror="this.onerror=null;this.src='https://placehold.co/64x64/E1F5FE/1A237E?text=SCI';">
+                <!-- Performance/UX Fix: Replaced broken relative path with a placeholder to prevent 404 errors. -->
+                <img src="https://placehold.co/64x64/E1F5FE/1A237E?text=SCI" 
+                     alt="Sky Creation Innovations Logo" 
+                     class="w-16 h-16 rounded-full border-2 border-white shadow-lg">
             </div>
 
             <div>
@@ -179,7 +186,7 @@
                    <span>Send Feedback</span>
                </a>
            </div>
-        
+       
            <div class="border-t border-gray-300/60 pt-4 mt-4">
                <p class="text-xs text-gray-500">
                    Copyright © 2025 Sky Creation Innovation. All Rights Reserved.
@@ -188,114 +195,148 @@
                    Web application adapted from the original Flutter concept.
                </p>
            </div>
-        </footer>
+       </footer>
     </main>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            // --- Configuration ---
             const GOOGLE_SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRr7DCKr0wS2h3CUaLId4txrwOAJ14CM4muzwwJ-IIudIfCoP88JgpAgxUPFBNvpFxybn-7qADW_scW/pub?gid=137486419&single=true&output=csv';
 
+            // --- State Management ---
             const state = {
                 rate: 0,
                 amount: 0,
                 convertToBaht: true,
-                adminRate: 0, // This will store the default MMK -> THB rate
+                adminRate: 0, // Stores the official MMK -> THB rate
             };
             
-            const rateInput = document.getElementById('rate-input');
-            const amountInput = document.getElementById('amount-input');
-            const resultText = document.getElementById('result-text');
-            const resultContainer = document.getElementById('result-container');
-            const rateHelper = document.getElementById('rate-helper');
-            const amountPrefix = document.getElementById('amount-prefix');
-            const toggleMmktThb = document.getElementById('toggle-mmk-thb');
-            const toggleThbMmk = document.getElementById('toggle-thb-mmk');
-            const clearButton = document.getElementById('clear-button');
-            const liveClock = document.getElementById('live-clock');
-            const copyButton = document.getElementById('copy-button');
-            const adminRateMmktThb = document.getElementById('admin-rate-mmk-thb');
-            const adminRateThbMmk = document.getElementById('admin-rate-thb-mmk');
-            const refreshRateBtn = document.getElementById('refresh-rate-btn');
+            // --- DOM Element Caching (Performance) ---
+            const dom = {
+                rateInput: document.getElementById('rate-input'),
+                amountInput: document.getElementById('amount-input'),
+                resultText: document.getElementById('result-text'),
+                resultContainer: document.getElementById('result-container'),
+                rateHelper: document.getElementById('rate-helper'),
+                amountPrefix: document.getElementById('amount-prefix'),
+                toggleMmktThb: document.getElementById('toggle-mmk-thb'),
+                toggleThbMmk: document.getElementById('toggle-thb-mmk'),
+                clearButton: document.getElementById('clear-button'),
+                liveClock: document.getElementById('live-clock'),
+                copyButton: document.getElementById('copy-button'),
+                adminRateMmktThb: document.getElementById('admin-rate-mmk-thb'),
+                adminRateThbMmk: document.getElementById('admin-rate-thb-mmk'),
+                refreshRateBtn: document.getElementById('refresh-rate-btn'),
+            };
 
-            let debounceTimer;
+            // --- Formatters ---
             const commaFormatter = new Intl.NumberFormat('en-US', { style: 'decimal', maximumFractionDigits: 3 });
             const numberFormatter = new Intl.NumberFormat('en-US', { maximumFractionDigits: 3 });
+            
+            let debounceTimer;
+            let helperTextTimeout;
 
+            // --- UI Update Functions ---
+            
             function updateClock() {
                 const now = new Date();
                 const options = { timeZone: 'Asia/Bangkok', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
-                liveClock.textContent = `Bangkok: ${now.toLocaleString('en-US', options)}`;
+                dom.liveClock.textContent = `Bangkok: ${now.toLocaleString('en-US', options)}`;
             }
             
-            function updateUI() {
+            function updateToggleButtons() {
                 const isMMKToTHB = state.convertToBaht;
-                
-                toggleMmktThb.classList.toggle('bg-indigo-600', isMMKToTHB);
-                toggleMmktThb.classList.toggle('text-white', isMMKToTHB);
-                toggleMmktThb.classList.toggle('text-indigo-600', !isMMKToTHB);
+                dom.toggleMmktThb.classList.toggle('bg-indigo-600', isMMKToTHB);
+                dom.toggleMmktThb.classList.toggle('text-white', isMMKToTHB);
+                dom.toggleMmktThb.classList.toggle('text-indigo-600', !isMMKToTHB);
 
-                toggleThbMmk.classList.toggle('bg-indigo-600', !isMMKToTHB);
-                toggleThbMmk.classList.toggle('text-white', !isMMKToTHB);
-                toggleThbMmk.classList.toggle('text-indigo-600', isMMKToTHB);
+                dom.toggleThbMmk.classList.toggle('bg-indigo-600', !isMMKToTHB);
+                dom.toggleThbMmk.classList.toggle('text-white', !isMMKToTHB);
+                dom.toggleThbMmk.classList.toggle('text-indigo-600', isMMKToTHB);
 
-                amountPrefix.textContent = isMMKToTHB ? 'MMK' : '฿';
+                dom.amountPrefix.textContent = isMMKToTHB ? 'MMK' : '฿';
             }
 
-            async function fetchAndUpdateRate(isManualRefresh = false) {
-                
+            function setAdminRateText(mmkThbMsg, thbMmkMsg) {
+                dom.adminRateMmktThb.textContent = mmkThbMsg;
+                dom.adminRateThbMmk.textContent = thbMmkMsg || mmkThbMsg;
+            }
 
+            function displayResult(text, type) {
+                if (!text) {
+                    dom.resultContainer.classList.add('opacity-0', 'scale-95');
+                    return;
+                }
+                
+                dom.resultContainer.classList.remove('opacity-0', 'scale-95');
+                dom.resultText.textContent = text;
+                
+                // Force reflow to restart animation
+                dom.resultText.className = 'text-4xl font-bold break-words'; // Reset classes
+                void dom.resultText.offsetWidth; 
+                dom.resultText.classList.add('result-flip');
+                
+                switch(type) {
+                    case 'error': dom.resultText.classList.add('text-red-500'); break;
+                    case 'success': dom.resultText.classList.add('text-green-600'); break;
+                    default: dom.resultText.classList.add('text-indigo-800');
+                }
+            }
+
+            // --- Core Logic ---
+
+            async function fetchAndUpdateRate(isManualRefresh = false) {
                 if (isManualRefresh) {
-                    const msg = 'Refreshing...';
-                    adminRateMmktThb.textContent = msg;
-                    adminRateThbMmk.textContent = msg;
+                    setAdminRateText('Refreshing...');
                 }
                 
                 try {
+                    // Security/Performance: Cache-busting to get the latest rates
                     const response = await fetch(`${GOOGLE_SHEET_CSV_URL}&_=${new Date().getTime()}`);
                     if (!response.ok) throw new Error(`Network response was not ok: ${response.statusText}`);
                     
                     const csvText = await response.text();
-                    // UPDATED: More flexible parsing. Splits by comma or whitespace (like newlines)
-                    // and filters out any empty items. This handles data in A1,B1 or A1,A2.
+                    // Robustness: More flexible parsing for CSV data
                     const rates = csvText.trim().split(/,|\s+/).filter(Boolean);
                     const fetchedRateMMKtoTHB = parseFloat(rates[0]);
                     const fetchedRateTHBtoMMK = parseFloat(rates[1]);
 
                     if (fetchedRateMMKtoTHB > 0 && fetchedRateTHBtoMMK > 0) {
-                        adminRateMmktThb.textContent = `${commaFormatter.format(fetchedRateMMKtoTHB)} THB`;
-                        adminRateThbMmk.textContent = `${commaFormatter.format(fetchedRateTHBtoMMK)} MMK`;
+                        setAdminRateText(
+                            `${commaFormatter.format(fetchedRateMMKtoTHB)} THB`,
+                            `${commaFormatter.format(fetchedRateTHBtoMMK)} MMK`
+                        );
                         
                         state.adminRate = fetchedRateMMKtoTHB;
 
-                        if (rateInput.value.trim() === '') {
+                        // If user hasn't typed a rate, update the calculation
+                        if (dom.rateInput.value.trim() === '') {
                             calculateAndDisplay();
                         }
                     } else {
-                        const msg = 'Invalid Rate';
-                        adminRateMmktThb.textContent = msg;
-                        adminRateThbMmk.textContent = msg;
+                        setAdminRateText('Invalid Rate');
                     }
                 } catch (error) {
                     console.error('Failed to fetch rate:', error);
-                    const msg = 'Load Failed';
-                    adminRateMmktThb.textContent = msg;
-                    adminRateThbMmk.textContent = msg;
+                    setAdminRateText('Load Failed');
                 }
             }
             
             function calculateAndDisplay() {
-                const userRateStr = rateInput.value.replace(/,/g, '');
-                const amountStr = amountInput.value.replace(/,/g, '');
+                const userRateStr = dom.rateInput.value.replace(/,/g, '');
+                const amountStr = dom.amountInput.value.replace(/,/g, '');
                 const userRate = parseFloat(userRateStr) || 0;
                 
                 state.rate = userRate > 0 ? userRate : state.adminRate;
                 state.amount = parseFloat(amountStr) || 0;
                 
+                // Clear any pending helper text updates
+                clearTimeout(helperTextTimeout);
                 if (state.rate > 0) {
                     const mmkPerBaht = 100000 / state.rate;
-                    rateHelper.textContent = `Using rate: 1 THB ≈ ${numberFormatter.format(mmkPerBaht)} MMK`;
+                    dom.rateHelper.textContent = `Using rate: 1 THB ≈ ${numberFormatter.format(mmkPerBaht)} MMK`;
                 } else {
-                    rateHelper.textContent = 'Enter a rate or use the official one.';
+                    dom.rateHelper.textContent = 'Enter a rate or use the official one.';
                 }
                 
                 if (state.rate <= 0 || state.amount <= 0) {
@@ -321,28 +362,11 @@
                 }
             }
 
-            function displayResult(text, type) {
-                if (!text) {
-                    resultContainer.classList.add('opacity-0', 'scale-95');
-                    return;
-                }
-                
-                resultContainer.classList.remove('opacity-0', 'scale-95');
-                resultText.textContent = text;
-                
-                resultText.classList.remove('text-red-500', 'text-green-600', 'text-indigo-800', 'result-flip');
-                void resultText.offsetWidth;
-                resultText.classList.add('result-flip');
-                
-                switch(type) {
-                    case 'error': resultText.classList.add('text-red-500'); break;
-                    case 'success': resultText.classList.add('text-green-600'); break;
-                    default: resultText.classList.add('text-indigo-800');
-                }
-            }
-            
+            // --- Input Handling & UX Helpers ---
+
             function formatNumericInput(e) {
                 const input = e.target;
+                // Security: Sanitize input to only allow numbers and one decimal point
                 let value = input.value.replace(/[^\d.]/g, '');
                 const parts = value.split('.');
                 let integerPart = parts[0];
@@ -352,15 +376,53 @@
             }
 
             function standardizeRate() {
-                const rate = parseFloat(rateInput.value.replace(/,/g, '')) || 0;
+                const rate = parseFloat(dom.rateInput.value.replace(/,/g, '')) || 0;
+                // UX: If user enters a rate like 85 (meaning 85 MMK per 1 THB), auto-correct it.
                 if (rate > 0 && rate < 300) { 
                     const standardRate = 100000 / rate;
-                    rateInput.value = commaFormatter.format(standardRate);
-                    calculateAndDisplay();
+                    dom.rateInput.value = commaFormatter.format(standardRate);
+                    
+                    // UX: Inform user of the auto-correction
+                    dom.rateHelper.textContent = 'Rate auto-corrected to standard format.';
+                    helperTextTimeout = setTimeout(() => calculateAndDisplay(), 2000);
                 }
             }
             
-            function handleCopy() {
+            /**
+             * Security/UX: A robust copy-to-clipboard function.
+             * Tries the modern Clipboard API first, then falls back to the
+             * older `document.execCommand` for compatibility with older
+             * browsers and restrictive environments (like some iframes).
+             * @param {string} text - The text to copy.
+             * @returns {Promise<void>}
+             */
+            async function copyToClipboard(text) {
+                try {
+                    if (navigator.clipboard && window.isSecureContext) {
+                        await navigator.clipboard.writeText(text);
+                    } else {
+                        throw new Error('Clipboard API not available.');
+                    }
+                } catch (err) {
+                    console.warn('Clipboard API failed, falling back to execCommand.', err);
+                    const textArea = document.createElement('textarea');
+                    textArea.value = text;
+                    textArea.style.position = 'absolute';
+                    textArea.style.left = '-9999px';
+                    document.body.appendChild(textArea);
+                    textArea.select();
+                    try {
+                        document.execCommand('copy');
+                    } catch (execErr) {
+                        console.error('Fallback copy failed:', execErr);
+                        throw new Error('Could not copy text.');
+                    } finally {
+                        document.body.removeChild(textArea);
+                    }
+                }
+            }
+
+            async function handleCopy() {
                 if (!state.rate || !state.amount) return;
 
                 const now = new Date();
@@ -369,7 +431,7 @@
                 const rateFor1THB = 100000 / state.rate;
                 const inputCurrency = state.convertToBaht ? 'MMK' : 'THB';
                 const inputAmount = commaFormatter.format(state.amount);
-                const resultString = resultText.textContent;
+                const resultString = dom.resultText.textContent;
                 
                 const textToCopy = `SCI Currency Conversion
 -------------------------------------
@@ -379,68 +441,71 @@ Rate Used: 100,000 MMK = ${commaFormatter.format(rateFor100kMMK)} THB
 Input: ${inputAmount} ${inputCurrency}
 Result: ${resultString}
 -------------------------------------
-Official MMK→THB: ${adminRateMmktThb.textContent}
-Official THB→MMK: ${adminRateThbMmk.textContent}
+Official MMK→THB: ${dom.adminRateMmktThb.textContent}
+Official THB→MMK: ${dom.adminRateThbMmk.textContent}
 -------------------------------------
-Converter: https://sciexchange.netlify.app/`;
+Converter by Sky Creation Innovation`;
 
-                navigator.clipboard.writeText(textToCopy).then(() => {
-                    const originalButtonHTML = copyButton.innerHTML;
-                    copyButton.innerHTML = `<span>✅</span> Copied!`;
-                    copyButton.disabled = true;
+                try {
+                    await copyToClipboard(textToCopy);
+                    const originalButtonHTML = dom.copyButton.innerHTML;
+                    dom.copyButton.innerHTML = `<span>✅</span> Copied!`;
+                    dom.copyButton.disabled = true;
                     setTimeout(() => {
-                        copyButton.innerHTML = originalButtonHTML;
-                        copyButton.disabled = false;
+                        dom.copyButton.innerHTML = originalButtonHTML;
+                        dom.copyButton.disabled = false;
                     }, 2000);
-                }).catch(err => {
-                    console.error('Failed to copy text: ', err);
-                });
+                } catch (err) {
+                    alert('Failed to copy text. Please copy manually.');
+                }
             }
 
+            // --- Event Listener Initialization ---
             function initializeEventListeners() {
                 const debouncedCalculate = () => {
                     clearTimeout(debounceTimer);
                     debounceTimer = setTimeout(calculateAndDisplay, 300);
                 };
 
-                rateInput.addEventListener('input', formatNumericInput);
-                rateInput.addEventListener('keyup', debouncedCalculate);
-                rateInput.addEventListener('blur', standardizeRate);
+                dom.rateInput.addEventListener('input', formatNumericInput);
+                dom.rateInput.addEventListener('keyup', debouncedCalculate);
+                dom.rateInput.addEventListener('blur', standardizeRate);
 
-                amountInput.addEventListener('input', formatNumericInput);
-                amountInput.addEventListener('keyup', debouncedCalculate);
+                dom.amountInput.addEventListener('input', formatNumericInput);
+                dom.amountInput.addEventListener('keyup', debouncedCalculate);
                 
-                toggleMmktThb.addEventListener('click', () => {
+                dom.toggleMmktThb.addEventListener('click', () => {
                     if (!state.convertToBaht) {
                         state.convertToBaht = true;
-                        updateUI();
+                        updateToggleButtons();
                         calculateAndDisplay();
                     }
                 });
                 
-                toggleThbMmk.addEventListener('click', () => {
+                dom.toggleThbMmk.addEventListener('click', () => {
                     if (state.convertToBaht) {
                         state.convertToBaht = false;
-                        updateUI();
+                        updateToggleButtons();
                         calculateAndDisplay();
                     }
                 });
                 
-                clearButton.addEventListener('click', () => {
-                    rateInput.value = '';
-                    amountInput.value = '';
+                dom.clearButton.addEventListener('click', () => {
+                    dom.rateInput.value = '';
+                    dom.amountInput.value = '';
                     calculateAndDisplay();
-                    rateInput.focus();
+                    dom.rateInput.focus();
                 });
 
-                refreshRateBtn.addEventListener('click', () => fetchAndUpdateRate(true));
-                copyButton.addEventListener('click', handleCopy);
+                dom.refreshRateBtn.addEventListener('click', () => fetchAndUpdateRate(true));
+                dom.copyButton.addEventListener('click', handleCopy);
             }
 
+            // --- App Initialization ---
             function init() {
                 updateClock();
                 setInterval(updateClock, 1000);
-                updateUI();
+                updateToggleButtons();
                 initializeEventListeners();
                 fetchAndUpdateRate();
             }
