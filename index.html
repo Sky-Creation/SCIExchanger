@@ -115,7 +115,7 @@
                         <div class="px-2 text-center">
                              <p class="text-sm text-indigo-600">THB → MMK</p>
                             <p class="text-md font-bold text-indigo-800"><span id="admin-rate-thb-mmk">Fetching...</span></p>
-                            <p class="text-xs text-indigo-400">for 1 THB</p>
+                            <p class="text-xs text-indigo-400">for 100,000 MMK</p>
                         </div>
                     </div>
                 </div>
@@ -242,13 +242,7 @@
             }
 
             async function fetchAndUpdateRate(isManualRefresh = false) {
-                if (GOOGLE_SHEET_CSV_URL === 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRr7DCKr0wS2h3CUaLId4txrwOAJ14CM4muzwwJ-IIudIfCoP88JgpAgxUPFBNvpFxybn-7qADW_scW/pub?gid=137486419&single=true&output=csv') {
-                    const msg = 'Setup Required';
-                    adminRateMmktThb.textContent = msg;
-                    adminRateThbMmk.textContent = msg;
-                    rateHelper.textContent = 'Please configure the Sheet URL in the script.';
-                    return;
-                }
+                
 
                 if (isManualRefresh) {
                     const msg = 'Refreshing...';
