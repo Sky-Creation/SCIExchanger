@@ -71,7 +71,7 @@
             display: inline-block;
             white-space: nowrap;
             padding-left: 100%;
-            animation: marquee 40s linear infinite;
+            animation: marquee 75s linear infinite;
         }
     </style>
 </head>
@@ -176,10 +176,9 @@
 
        <footer class="mt-8 text-center space-y-4">
             <div class="flex justify-center">
-                <img src="images/profile-picture.jpg" 
-                     alt="Profile Picture of the developer" 
-                     class="w-16 h-16 rounded-full border-2 border-white shadow-lg"
-                     onerror="this.onerror=null;this.src='https://placehold.co/64x64/E1F5FE/1A237E?text=SCI';">
+                <img src="https://placehold.co/64x64/E1F5FE/1A237E?text=SCI" 
+                     alt="Sky Creation Innovations Logo" 
+                     class="w-16 h-16 rounded-full border-2 border-white shadow-lg">
             </div>
 
             <div>
@@ -316,11 +315,10 @@
                         
                         state.adminRate = fetchedRateMMKtoTHB;
 
-                        // Trigger the visual update animation
                         dom.officialRateContainer.classList.add('rate-updated');
                         setTimeout(() => {
                             dom.officialRateContainer.classList.remove('rate-updated');
-                        }, 1200); // Duration must match the CSS animation
+                        }, 1200);
 
                         if (dom.rateInput.value.trim() === '') {
                             calculateAndDisplay();
@@ -503,8 +501,7 @@ Converter by Sky Creation Innovation`;
                 setInterval(updateClock, 1000);
                 updateToggleButtons();
                 initializeEventListeners();
-                fetchAndUpdateRate(); // Initial fetch
-                // Set up auto-refresh every 5 seconds
+                fetchAndUpdateRate();
                 setInterval(() => fetchAndUpdateRate(false), 5000); 
             }
 
