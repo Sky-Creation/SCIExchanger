@@ -32,6 +32,16 @@
             100% { transform: translateX(-100%); }
         }
 
+        /* Animation for when the rate updates */
+        @keyframes pulse-bg {
+            0%, 100% { background-color: #EEF2FF; } /* bg-indigo-50 */
+            50% { background-color: #C7D2FE; } /* bg-indigo-200 */
+        }
+
+        .rate-updated {
+            animation: pulse-bg 1.2s ease-in-out;
+        }
+
         .animated-shape {
             position: absolute;
             z-index: 0;
@@ -166,9 +176,10 @@
 
        <footer class="mt-8 text-center space-y-4">
             <div class="flex justify-center">
-                <img src="https://placehold.co/64x64/E1F5FE/1A237E?text=SCI" 
-                     alt="Sky Creation Innovations Logo" 
-                     class="w-16 h-16 rounded-full border-2 border-white shadow-lg">
+                <img src="images/profile-picture.jpg" 
+                     alt="Profile Picture of the developer" 
+                     class="w-16 h-16 rounded-full border-2 border-white shadow-lg"
+                     onerror="this.onerror=null;this.src='https://placehold.co/64x64/E1F5FE/1A237E?text=SCI';">
             </div>
 
             <div>
@@ -194,7 +205,6 @@
             // --- Configuration ---
             const API_KEY = 'AIzaSyAk_CEoOq2dpUS2FHj8om6lC8MfD-XyaSM'; 
             const SPREADSHEET_ID = '1vI0Ip4--bTwoyWa7TZRyxG9YqYx-YqRnBMaBjo1d3KA'; 
-            // BUG FIX: Updated the sheet name to the one specified by the user.
             const RANGE = "'Rate for SCI'!A1:B1"; 
 
             const API_URL = `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${encodeURIComponent(RANGE)}?key=${API_KEY}`;
@@ -216,6 +226,7 @@
                 adminRateMmktThb: document.getElementById('admin-rate-mmk-thb'),
                 adminRateThbMmk: document.getElementById('admin-rate-thb-mmk'),
                 refreshRateBtn: document.getElementById('refresh-rate-btn'),
+                officialRateContainer: document.getElementById('official-rate-container'),
             };
 
             const commaFormatter = new Intl.NumberFormat('en-US', { style: 'decimal', maximumFractionDigits: 3 });
@@ -304,6 +315,12 @@
                         );
                         
                         state.adminRate = fetchedRateMMKtoTHB;
+
+                        // Trigger the visual update animation
+                        dom.officialRateContainer.classList.add('rate-updated');
+                        setTimeout(() => {
+                            dom.officialRateContainer.classList.remove('rate-updated');
+                        }, 1200); // Duration must match the CSS animation
 
                         if (dom.rateInput.value.trim() === '') {
                             calculateAndDisplay();
@@ -486,7 +503,9 @@ Converter by Sky Creation Innovation`;
                 setInterval(updateClock, 1000);
                 updateToggleButtons();
                 initializeEventListeners();
-                fetchAndUpdateRate();
+                fetchAndUpdateRate(); // Initial fetch
+                // Set up auto-refresh every 5 seconds
+                setInterval(() => fetchAndUpdateRate(false), 5000); 
             }
 
             init();
