@@ -193,11 +193,11 @@
         document.addEventListener('DOMContentLoaded', () => {
             // --- Configuration ---
             const API_KEY = 'AIzaSyAk_CEoOq2dpUS2FHj8om6lC8MfD-XyaSM'; 
-            // BUG FIX: Updated with the correct SPREADSHEET_ID provided by the user.
             const SPREADSHEET_ID = '1vI0Ip4--bTwoyWa7TZRyxG9YqYx-YqRnBMaBjo1d3KA'; 
-            const RANGE = 'Sheet1!A1:B1'; 
+            // BUG FIX: Updated the sheet name to the one specified by the user.
+            const RANGE = "'Rate for SCI'!A1:B1"; 
 
-            const API_URL = `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${RANGE}?key=${API_KEY}`;
+            const API_URL = `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${encodeURIComponent(RANGE)}?key=${API_KEY}`;
 
             const state = { rate: 0, amount: 0, convertToBaht: true, adminRate: 0 };
             
