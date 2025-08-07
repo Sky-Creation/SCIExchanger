@@ -9,12 +9,15 @@ exports.handler = async function(event, context) {
     const API_URL = `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${encodeURIComponent(RANGE)}?key=${API_KEY}`;
 
     try {
-        // The 'node-fetch' library is needed to make requests in a Node.js environment.
-        // Netlify functions automatically support it.
+        // CORRECT WAY TO IMPORT NODE-FETCH IN A NETLIFY FUNCTION
         const fetch = (await import('node-fetch')).default;
+        
         const response = await fetch(API_URL);
 
         if (!response.ok) {
+            // Log the detailed error from the API for better debugging
+            const errorBody = await response.text();
+            console.error("Google Sheets API Error:", errorBody);
             return {
                 statusCode: response.status,
                 body: JSON.stringify({ error: `API request failed: ${response.statusText}` }),
