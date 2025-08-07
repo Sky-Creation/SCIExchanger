@@ -4,83 +4,34 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SCI Currency Converter | MMK ⇔ THB</title>
+    
+    <!-- Tailwind CSS Framework -->
     <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #F3E5F5;
-            background-image: linear-gradient(to bottom, #F3E5F5, #E1F5FE);
-            overflow-x: hidden; 
-        }
-        
-        @keyframes float {
-            0% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-25px) rotate(180deg); }
-            100% { transform: translateY(0px) rotate(360deg); }
-        }
-
-        @keyframes flipIn {
-            from { transform: perspective(400px) rotateX(90deg); opacity: 0; }
-            to { transform: perspective(400px) rotateX(0deg); opacity: 1; }
-        }
-        
-        /* Animation for when the rate updates */
-        @keyframes pulse-bg {
-            0%, 100% { background-color: #EEF2FF; } /* bg-indigo-50 */
-            50% { background-color: #C7D2FE; } /* bg-indigo-200 */
-        }
-
-        .rate-updated {
-            animation: pulse-bg 1.2s ease-in-out;
-        }
-
-        .animated-shape {
-            position: absolute;
-            z-index: 0;
-            opacity: 0.6;
-            animation: float 15s ease-in-out infinite;
-        }
-
-        .result-flip {
-            animation: flipIn 0.5s ease-out;
-        }
-        
-        #converter-card {
-            transform-style: preserve-3d;
-            transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-        }
-
-        #converter-card:hover {
-            transform: perspective(1000px) rotateY(1.5deg) rotateX(3deg) scale(1.02);
-        }
-
-        .button-press-effect:active {
-            transform: scale(0.95);
-            transition: transform 0.1s ease-in-out;
-        }
-
-    </style>
+    
+    <!-- Custom Stylesheet -->
+    <link rel="stylesheet" href="style.css">
 </head>
-<body class="min-h-screen w-full flex items-center justify-center p-4 relative">
+<body class="min-h-screen w-full flex items-center justify-center p-4 sm:p-6 lg:p-8 relative">
 
+    <!-- Decorative background shapes -->
     <div class="animated-shape w-48 h-48 bg-purple-200/50 rounded-full top-10 -left-20"></div>
-    <div class="animated-shape w-64 h-64 bg-indigo-200/50 rounded-full bottom-5 -right-24" style="animation-duration: 20s;"></div>
+    <div class="animated-shape w-64 h-64 bg-indigo-200/50 rounded-full bottom-5 -right-24 md:-right-10" style="animation-duration: 20s;"></div>
 
-    <main class="w-full max-w-md mx-auto z-10">
+    <main class="w-full max-w-md md:max-w-2xl mx-auto z-10">
         <header class="text-center mb-6">
-            <h1 class="text-3xl font-bold text-[#1A237E]">SCI Currency Converter</h1>
+            <h1 class="text-3xl sm:text-4xl font-bold text-[#1A237E]">SCI Currency Converter</h1>
             <p class="text-md text-[#3F51B5]">Myanmar Kyat (MMK) & Thai Baht (THB)</p>
-            <p id="live-clock" class="text-xs text-gray-500 mt-2 h-4"></p>
+            <p id="live-clock" class="text-sm text-gray-500 mt-2 h-4"></p>
         </header>
 
-        <div class="mt-8 text-center text-xs text-indigo-800/100 font-medium">
-            <p>
-                If you're interested in adding a feature like this or creating a website for your business, feel free to contact us by clicking 'Send Feedback'. </p>
-             <p>   ဒီလိုပုံစံတစ်ခုထည့်ချင်တာဖြစ်စေ၊ သင့်စီးပွားရေးဝက်ဘ်ဆိုဒ်တစ်ခုတည်ဆောက်ချင်တာဖြစ်စေ၊ 'Send Feedback' ကိုနှိပ်ပြီး ဆက်သွယ်နိုင်ပါတယ်။ </p>
-            
+        <div class="mt-8 text-center text-xs text-indigo-800/100 font-medium space-y-2">
+            <p>If you're interested in adding a feature like this or creating a website for your business, feel free to contact us by clicking 'Send Feedback'.</p>
+            <p>ဒီလိုပုံစံတစ်ခုထည့်ချင်တာဖြစ်စေ၊ သင့်စီးပွားရေးဝက်ဘ်ဆိုဒ်တစ်ခုတည်ဆောက်ချင်တာဖြစ်စေ၊ 'Send Feedback' ကိုနှိပ်ပြီး ဆက်သွယ်နိုင်ပါတယ်။</p>
         </div>
         
         <div class="p-1 bg-gradient-to-br from-indigo-200 via-purple-200 to-pink-200 rounded-2xl shadow-2xl relative mt-4">
@@ -94,7 +45,7 @@
             <div id="converter-card" class="bg-white/80 backdrop-blur-sm rounded-xl p-6 md:p-8">
                 <div id="official-rate-container" class="mb-6 p-4 bg-indigo-50 rounded-lg text-center">
                     <div class="flex items-center justify-between mb-3">
-                        <p class="text-xs font-medium text-indigo-500 flex items-center gap-2">
+                        <p class="text-sm font-medium text-indigo-500 flex items-center gap-2">
                             <span class="relative flex h-2 w-2">
                                 <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
                                 <span class="relative inline-flex rounded-full h-2 w-2 bg-indigo-500"></span>
@@ -110,9 +61,9 @@
                             <p class="text-xs text-indigo-500">for 100,000 MMK</p>
                         </div>
                         <div class="px-2 text-center">
-                             <p class="text-sm text-indigo-600">THB → MMK</p>
+                            <p class="text-sm text-indigo-600">THB → MMK</p>
                             <p class="text-md font-bold text-indigo-800"><span id="admin-rate-thb-mmk">Fetching...</span></p>
-                            <p class="text-xs text-indigo-500">for 100,000 MMK</p>
+                            <p class="text-xs text-indigo-500">for 1,000 THB</p>
                         </div>
                     </div>
                 </div>
@@ -142,7 +93,7 @@
                     <div>
                         <label for="amount-input" class="block text-sm font-medium text-gray-700 mb-1">Amount to Convert</label>
                         <div class="flex items-center w-full rounded-lg border border-gray-300 bg-white shadow-sm focus-within:border-indigo-500 focus-within:ring-4 focus-within:ring-indigo-500/20 transition-all duration-300 transform focus-within:scale-[1.02]">
-                            <span id="amount-prefix" class="px-4 text-gray-500 font-semibold sm:text-sm">MMK</span>
+                            <span id="amount-prefix" class="px-4 text-gray-500 font-semibold sm:text-lg">MMK</span>
                             <input type="text" id="amount-input" inputmode="decimal" class="flex-grow py-3 pr-4 bg-transparent border-0 focus:ring-0 text-lg" placeholder="0.00">
                         </div>
                     </div>
@@ -164,12 +115,11 @@
 
        <footer class="mt-8 text-center space-y-4">
             <div class="flex justify-center">
-                <img src="images/profile-picture.jpg" 
-                     alt="Profile Picture of the developer" 
-                     class="w-16 h-16 rounded-full border-2 border-white shadow-lg"
-                     onerror="this.onerror=null;this.src='https://placehold.co/64x64/E1F5FE/1A237E?text=SCI';">
+                <img src="https://placehold.co/64x64/E1F5FE/1A237E?text=SCI" 
+                     alt="Sky Creation Innovations Logo" 
+                     class="w-16 h-16 rounded-full border-2 border-white shadow-lg">
             </div>
-           
+            
             <div>
                <a href="https://www.facebook.com/skycreationinnovations" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 bg-blue-500 text-white text-sm font-semibold px-4 py-2 rounded-full shadow-md hover:bg-blue-600 transition-colors button-press-effect">
                    <span>💬</span>
@@ -188,314 +138,7 @@
        </footer>
     </main>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // --- Configuration ---
-            const API_KEY = 'AIzaSyAk_CEoOq2dpUS2FHj8om6lC8MfD-XyaSM'; 
-            const SPREADSHEET_ID = '1vI0Ip4--bTwoyWa7TZRyxG9YqYx-YqRnBMaBjo1d3KA'; 
-            const RANGE = "'Rate for SCI'!A1:B1"; 
-
-            const API_URL = `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${encodeURIComponent(RANGE)}?key=${API_KEY}`;
-
-            const state = { rate: 0, amount: 0, convertToBaht: true, adminRate: 0 };
-            
-            const dom = {
-                rateInput: document.getElementById('rate-input'),
-                amountInput: document.getElementById('amount-input'),
-                resultText: document.getElementById('result-text'),
-                resultContainer: document.getElementById('result-container'),
-                rateHelper: document.getElementById('rate-helper'),
-                amountPrefix: document.getElementById('amount-prefix'),
-                toggleMmktThb: document.getElementById('toggle-mmk-thb'),
-                toggleThbMmk: document.getElementById('toggle-thb-mmk'),
-                clearButton: document.getElementById('clear-button'),
-                liveClock: document.getElementById('live-clock'),
-                copyButton: document.getElementById('copy-button'),
-                adminRateMmktThb: document.getElementById('admin-rate-mmk-thb'),
-                adminRateThbMmk: document.getElementById('admin-rate-thb-mmk'),
-                refreshRateBtn: document.getElementById('refresh-rate-btn'),
-                officialRateContainer: document.getElementById('official-rate-container'),
-            };
-
-            const commaFormatter = new Intl.NumberFormat('en-US', { style: 'decimal', maximumFractionDigits: 3 });
-            const numberFormatter = new Intl.NumberFormat('en-US', { maximumFractionDigits: 3 });
-            
-            let debounceTimer;
-            let helperTextTimeout;
-            
-            function updateClock() {
-                const now = new Date();
-                const options = { timeZone: 'Asia/Bangkok', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
-                dom.liveClock.textContent = `Bangkok: ${now.toLocaleString('en-US', options)}`;
-            }
-            
-            function updateToggleButtons() {
-                const isMMKToTHB = state.convertToBaht;
-                dom.toggleMmktThb.classList.toggle('bg-indigo-600', isMMKToTHB);
-                dom.toggleMmktThb.classList.toggle('text-white', isMMKToTHB);
-                dom.toggleMmktThb.classList.toggle('text-indigo-600', !isMMKToTHB);
-
-                dom.toggleThbMmk.classList.toggle('bg-indigo-600', !isMMKToTHB);
-                dom.toggleThbMmk.classList.toggle('text-white', !isMMKToTHB);
-                dom.toggleThbMmk.classList.toggle('text-indigo-600', isMMKToTHB);
-
-                dom.amountPrefix.textContent = isMMKToTHB ? 'MMK' : '฿';
-            }
-
-            function setAdminRateText(mmkThbMsg, thbMmkMsg) {
-                dom.adminRateMmktThb.textContent = mmkThbMsg;
-                dom.adminRateThbMmk.textContent = thbMmkMsg || mmkThbMsg;
-            }
-
-            function displayResult(text, type) {
-                if (!text) {
-                    dom.resultContainer.classList.add('opacity-0', 'scale-95');
-                    return;
-                }
-                
-                dom.resultContainer.classList.remove('opacity-0', 'scale-95');
-                dom.resultText.textContent = text;
-                
-                dom.resultText.className = 'text-4xl font-bold break-words';
-                void dom.resultText.offsetWidth; 
-                dom.resultText.classList.add('result-flip');
-                
-                switch(type) {
-                    case 'error': dom.resultText.classList.add('text-red-500'); break;
-                    case 'success': dom.resultText.classList.add('text-green-600'); break;
-                    default: dom.resultText.classList.add('text-indigo-800');
-                }
-            }
-
-            async function fetchAndUpdateRate(isManualRefresh = false) {
-                if (API_KEY === 'YOUR_API_KEY_HERE' || !API_KEY) {
-                    setAdminRateText('API Key Needed');
-                    console.error("API Key is missing. Please add it to the script.");
-                    return;
-                }
-
-                if (isManualRefresh) {
-                    setAdminRateText('Refreshing...');
-                }
-                
-                try {
-                    const response = await fetch(API_URL);
-                    if (!response.ok) {
-                        const errorBody = await response.json();
-                        console.error("API Error Response:", errorBody);
-                        throw new Error(`API request failed: ${response.status} ${response.statusText}`);
-                    }
-                    
-                    const data = await response.json();
-                    
-                    if (!data.values || !data.values[0]) {
-                        throw new Error("No data returned from API. Check Sheet name and range.");
-                    }
-
-                    const rates = data.values[0];
-                    const fetchedRateMMKtoTHB = parseFloat(rates[0]);
-                    const fetchedRateTHBtoMMK = parseFloat(rates[1]);
-
-                    if (fetchedRateMMKtoTHB > 0 && fetchedRateTHBtoMMK > 0) {
-                        setAdminRateText(
-                            `${commaFormatter.format(fetchedRateMMKtoTHB)} THB`,
-                            `${commaFormatter.format(fetchedRateTHBtoMMK)} MMK`
-                        );
-                        
-                        state.adminRate = fetchedRateMMKtoTHB;
-
-                        dom.officialRateContainer.classList.add('rate-updated');
-                        setTimeout(() => {
-                            dom.officialRateContainer.classList.remove('rate-updated');
-                        }, 1200);
-
-                        if (dom.rateInput.value.trim() === '') {
-                            calculateAndDisplay();
-                        }
-                    } else {
-                        setAdminRateText('Invalid Rate');
-                    }
-                } catch (error) {
-                    console.error('Failed to fetch rate via API:', error);
-                    setAdminRateText('Load Failed');
-                }
-            }
-            
-            function calculateAndDisplay() {
-                const userRateStr = dom.rateInput.value.replace(/,/g, '');
-                const amountStr = dom.amountInput.value.replace(/,/g, '');
-                const userRate = parseFloat(userRateStr) || 0;
-                
-                state.rate = userRate > 0 ? userRate : state.adminRate;
-                state.amount = parseFloat(amountStr) || 0;
-                
-                clearTimeout(helperTextTimeout);
-                if (state.rate > 0) {
-                    const mmkPerBaht = 100000 / state.rate;
-                    dom.rateHelper.textContent = `Using rate: 1 THB ≈ ${numberFormatter.format(mmkPerBaht)} MMK`;
-                } else {
-                    dom.rateHelper.textContent = 'Enter a rate or use the official one.';
-                }
-                
-                if (state.rate <= 0 || state.amount <= 0) {
-                    displayResult('', 'default');
-                    return;
-                }
-                
-                try {
-                    let result = 0;
-                    let resultString = '';
-                    if (state.convertToBaht) {
-                        result = (state.amount / 100000) * state.rate;
-                        resultString = `฿ ${commaFormatter.format(result)}`;
-                    } else {
-                        const mmkPerBaht = 100000 / state.rate;
-                        result = state.amount * mmkPerBaht;
-                        resultString = `MMK ${commaFormatter.format(result)}`;
-                    }
-                    displayResult(resultString, 'success');
-                } catch(e) {
-                    console.error("Calculation error:", e);
-                    displayResult('Calculation Error', 'error');
-                }
-            }
-
-            function formatNumericInput(e) {
-                const input = e.target;
-                let value = input.value.replace(/[^\d.]/g, '');
-                const parts = value.split('.');
-                let integerPart = parts[0];
-                let decimalPart = parts.length > 1 ? `.${parts[1].substring(0,3)}` : '';
-                let formattedInteger = integerPart.replace(/,/g, '').replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-                input.value = formattedInteger + decimalPart;
-            }
-
-            function standardizeRate() {
-                const rate = parseFloat(dom.rateInput.value.replace(/,/g, '')) || 0;
-                if (rate > 0 && rate < 300) { 
-                    const standardRate = 100000 / rate;
-                    dom.rateInput.value = commaFormatter.format(standardRate);
-                    
-                    dom.rateHelper.textContent = 'Rate auto-corrected to standard format.';
-                    helperTextTimeout = setTimeout(() => calculateAndDisplay(), 2000);
-                }
-            }
-            
-            async function copyToClipboard(text) {
-                try {
-                    if (navigator.clipboard && window.isSecureContext) {
-                        await navigator.clipboard.writeText(text);
-                    } else {
-                        throw new Error('Clipboard API not available.');
-                    }
-                } catch (err) {
-                    console.warn('Clipboard API failed, falling back to execCommand.', err);
-                    const textArea = document.createElement('textarea');
-                    textArea.value = text;
-                    textArea.style.position = 'absolute';
-                    textArea.style.left = '-9999px';
-                    document.body.appendChild(textArea);
-                    textArea.select();
-                    try {
-                        document.execCommand('copy');
-                    } catch (execErr) {
-                        console.error('Fallback copy failed:', execErr);
-                        throw new Error('Could not copy text.');
-                    } finally {
-                        document.body.removeChild(textArea);
-                    }
-                }
-            }
-
-            async function handleCopy() {
-                if (!state.rate || !state.amount) return;
-
-                const now = new Date();
-                const timestamp = now.toLocaleString('en-US', { timeZone: 'Asia/Bangkok', day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' });
-                const rateFor100kMMK = state.rate;
-                const rateFor1THB = 100000 / state.rate;
-                const inputCurrency = state.convertToBaht ? 'MMK' : 'THB';
-                const inputAmount = commaFormatter.format(state.amount);
-                const resultString = dom.resultText.textContent;
-                
-                const textToCopy = `SCI Currency Conversion
--------------------------------------
-Date: ${timestamp}
-Rate Used: 100,000 MMK = ${commaFormatter.format(rateFor100kMMK)} THB
-(1 THB ≈ ${numberFormatter.format(rateFor1THB)} MMK)
-Input: ${inputAmount} ${inputCurrency}
-Result: ${resultString}
--------------------------------------
-Official MMK→THB: ${dom.adminRateMmktThb.textContent}
-Official THB→MMK: ${dom.adminRateThbMmk.textContent}
--------------------------------------
-Converter by Sky Creation Innovation`;
-
-                try {
-                    await copyToClipboard(textToCopy);
-                    const originalButtonHTML = dom.copyButton.innerHTML;
-                    dom.copyButton.innerHTML = `<span>✅</span> Copied!`;
-                    dom.copyButton.disabled = true;
-                    setTimeout(() => {
-                        dom.copyButton.innerHTML = originalButtonHTML;
-                        dom.copyButton.disabled = false;
-                    }, 2000);
-                } catch (err) {
-                    alert('Failed to copy text. Please copy manually.');
-                }
-            }
-
-            function initializeEventListeners() {
-                const debouncedCalculate = () => {
-                    clearTimeout(debounceTimer);
-                    debounceTimer = setTimeout(calculateAndDisplay, 300);
-                };
-
-                dom.rateInput.addEventListener('input', formatNumericInput);
-                dom.rateInput.addEventListener('keyup', debouncedCalculate);
-                dom.rateInput.addEventListener('blur', standardizeRate);
-
-                dom.amountInput.addEventListener('input', formatNumericInput);
-                dom.amountInput.addEventListener('keyup', debouncedCalculate);
-                
-                dom.toggleMmktThb.addEventListener('click', () => {
-                    if (!state.convertToBaht) {
-                        state.convertToBaht = true;
-                        updateToggleButtons();
-                        calculateAndDisplay();
-                    }
-                });
-                
-                dom.toggleThbMmk.addEventListener('click', () => {
-                    if (state.convertToBaht) {
-                        state.convertToBaht = false;
-                        updateToggleButtons();
-                        calculateAndDisplay();
-                    }
-                });
-                
-                dom.clearButton.addEventListener('click', () => {
-                    dom.rateInput.value = '';
-                    dom.amountInput.value = '';
-                    calculateAndDisplay();
-                    dom.rateInput.focus();
-                });
-
-                dom.refreshRateBtn.addEventListener('click', () => fetchAndUpdateRate(true));
-                dom.copyButton.addEventListener('click', handleCopy);
-            }
-
-            function init() {
-                updateClock();
-                setInterval(updateClock, 1000);
-                updateToggleButtons();
-                initializeEventListeners();
-                fetchAndUpdateRate();
-                setInterval(() => fetchAndUpdateRate(false), 5000); 
-            }
-
-            init();
-        });
-    </script>
+    <!-- Custom JavaScript -->
+    <script src="main.js"></script>
 </body>
 </html>
