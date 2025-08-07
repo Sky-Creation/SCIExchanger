@@ -1,0 +1,11 @@
+# netlify.toml
+[build]
+  # This tells Netlify where your serverless functions are located.
+  functions = "netlify/functions"
+
+[[redirects]]
+  # This rule rewrites requests from your frontend's /api/get-rate
+  # to the actual serverless function, making the URL cleaner.
+  from = "/api/*"
+  to = "/.netlify/functions/:splat"
+  status = 200
