@@ -95,7 +95,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 setAdminRateText(
                     `${commaFormatter.format(fetchedRateMMKtoTHB)} THB`,
-                    `${commaFormatter.format(fetchedRateTHBtoMMK)} MMK`
+                    `${commaFormatter.format(fetchedRateTHBtoMMK)} THB`
                 );
                 
                 dom.officialRateContainer.classList.add('rate-updated');
