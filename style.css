@@ -1,0 +1,55 @@
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #F3E5F5;
+    background-image: linear-gradient(to bottom, #F3E5F5, #E1F5FE);
+    overflow-x: hidden; 
+}
+
+/* --- Animations --- */
+@keyframes float {
+    0% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-25px) rotate(180deg); }
+    100% { transform: translateY(0px) rotate(360deg); }
+}
+
+@keyframes flipIn {
+    from { transform: perspective(400px) rotateX(90deg); opacity: 0; }
+    to { transform: perspective(400px) rotateX(0deg); opacity: 1; }
+}
+
+@keyframes pulse-bg {
+    0%, 100% { background-color: #EEF2FF; } /* bg-indigo-50 */
+    50% { background-color: #C7D2FE; } /* bg-indigo-200 */
+}
+
+.rate-updated {
+    animation: pulse-bg 1.2s ease-in-out;
+}
+
+.animated-shape {
+    position: absolute;
+    z-index: 0;
+    opacity: 0.6;
+    animation: float 15s ease-in-out infinite;
+}
+
+.result-flip {
+    animation: flipIn 0.5s ease-out;
+}
+
+#converter-card {
+    transform-style: preserve-3d;
+    transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* --- Interaction Effects --- */
+@media (hover: hover) and (pointer: fine) {
+    #converter-card:hover {
+        transform: perspective(1000px) rotateY(1.5deg) rotateX(3deg) scale(1.02);
+    }
+}
+
+.button-press-effect:active {
+    transform: scale(0.95);
+    transition: transform 0.1s ease-in-out;
+}
