@@ -16,6 +16,11 @@ body {
     50% { background-color: #C7D2FE; } /* bg-indigo-200 */
 }
 
+@keyframes scroll {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+}
+
 .rate-updated {
     animation: pulse-bg 1.2s ease-in-out;
 }
@@ -29,10 +34,36 @@ body {
     transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
+/* --- Ad Scroller --- */
+.ad-container {
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+    -webkit-mask-image: linear-gradient(to right, transparent, white 20%, white 80%, transparent);
+    mask-image: linear-gradient(to right, transparent, white 20%, white 80%, transparent);
+}
+
+.ad-scroller {
+    display: flex;
+    gap: 1rem; /* Spacing between ads */
+    animation: scroll 30s linear infinite;
+}
+
+.ad-item {
+    flex-shrink: 0;
+    width: 300px;
+    height: 300px;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+}
+
 /* --- Interaction Effects --- */
 @media (hover: hover) and (pointer: fine) {
     #converter-card:hover {
         transform: perspective(1000px) rotateY(1.5deg) rotateX(3deg) scale(1.02);
+    }
+    .ad-scroller:hover {
+        animation-play-state: paused;
     }
 }
 
