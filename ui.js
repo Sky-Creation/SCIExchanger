@@ -20,30 +20,39 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --- NEW: Manual Ad Scroller Logic ---
-    function initializeAdScroller() {
-        const scroller = document.querySelector('.ad-scroller');
-        const nextBtn = document.getElementById('ad-next-btn');
-        const prevBtn = document.getElementById('ad-prev-btn');
+   function initializeAdScroller() {
+        const slider = document.querySelector('.ad-scroller');
+        if (!slider) return;
 
-        if (!scroller || !nextBtn || !prevBtn) {
-            return;
-        }
+        let isDown = false;
+        let startX;
+        let scrollLeft;
 
-        const scrollAmount = 316; // Width of ad (300) + gap (16)
-
-        const handleManualScroll = () => {
-            // Stop automatic animation on manual interaction
-            scroller.style.animation = 'none';
-        };
-
-        nextBtn.addEventListener('click', () => {
-            handleManualScroll();
-            scroller.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+        slider.addEventListener('mousedown', (e) => {
+            isDown = true;
+            slider.classList.add('active');
+            startX = e.pageX - slider.offsetLeft;
+            scrollLeft = slider.scrollLeft;
+            // Stop the automatic animation if it were ever re-enabled
+            slider.style.animation = 'none'; 
         });
 
-        prevBtn.addEventListener('click', () => {
-            handleManualScroll();
-            scroller.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+        slider.addEventListener('mouseleave', () => {
+            isDown = false;
+            slider.classList.remove('active');
+        });
+
+        slider.addEventListener('mouseup', () => {
+            isDown = false;
+            slider.classList.remove('active');
+        });
+
+        slider.addEventListener('mousemove', (e) => {
+            if (!isDown) return;
+            e.preventDefault();
+            const x = e.pageX - slider.offsetLeft;
+            const walk = (x - startX) * 2; // The '* 2' makes the drag feel faster
+            slider.scrollLeft = scrollLeft - walk;
         });
     }
 
