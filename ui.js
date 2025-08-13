@@ -19,6 +19,35 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    // --- NEW: Manual Ad Scroller Logic ---
+    function initializeAdScroller() {
+        const scroller = document.querySelector('.ad-scroller');
+        const nextBtn = document.getElementById('ad-next-btn');
+        const prevBtn = document.getElementById('ad-prev-btn');
+
+        if (!scroller || !nextBtn || !prevBtn) {
+            return;
+        }
+
+        const scrollAmount = 316; // Width of ad (300) + gap (16)
+
+        const handleManualScroll = () => {
+            // Stop automatic animation on manual interaction
+            scroller.style.animation = 'none';
+        };
+
+        nextBtn.addEventListener('click', () => {
+            handleManualScroll();
+            scroller.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+        });
+
+        prevBtn.addEventListener('click', () => {
+            handleManualScroll();
+            scroller.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+        });
+    }
+
     // Initialize all UI components
     initializeMobileMenu();
+    initializeAdScroller(); // <-- Add this line
 });
