@@ -12,7 +12,7 @@ exports.handler = async function(event, context) {
         console.error("CRITICAL: GOOGLE_SHEETS_API_KEY environment variable not set or found.");
         return {
             statusCode: 500,
-            body: JSON.stringify({ error: 'Server configuration error: The API key is missing.' }),
+            body: JSON.stringify({ error: 'Server configuration error: The API key is missing. Please ensure it is set in the Netlify environment variables.' }),
         };
     }
     // --- END OF CHECK ---
