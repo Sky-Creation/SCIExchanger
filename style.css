@@ -46,7 +46,7 @@ body {
 .ad-scroller {
     display: flex;
     gap: 1rem; /* Spacing between ads */
-    animation: scroll 30s linear infinite;
+    animation: scroll 15s linear infinite;
 }
 
 .ad-item {
@@ -55,6 +55,37 @@ body {
     height: 300px;
     border-radius: 0.5rem;
     box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+}
+
+/* Add this to style.css */
+.ad-nav-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.4);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    font-size: 24px;
+    line-height: 40px;
+    text-align: center;
+    cursor: pointer;
+    z-index: 10;
+    transition: background-color 0.3s;
+}
+
+.ad-nav-btn:hover {
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+.ad-prev {
+    left: 10px;
+}
+
+.ad-next {
+    right: 10px;
 }
 
 /* --- Interaction Effects --- */
