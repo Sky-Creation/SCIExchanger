@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // --- Configuration ---
+    // --- Main App Configuration ---
     const SECURE_API_ENDPOINT = '/api/get-rate'; 
 
     const state = {
@@ -37,7 +37,9 @@ document.addEventListener('DOMContentLoaded', () => {
     function updateClock() {
         const now = new Date();
         const options = { timeZone: 'Asia/Bangkok', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
-        dom.liveClock.textContent = `Bangkok: ${now.toLocaleString('en-US', options)}`;
+        if(dom.liveClock) {
+            dom.liveClock.textContent = `Bangkok: ${now.toLocaleString('en-US', options)}`;
+        }
     }
     
     function updateToggleButtons() {
