@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     // --- Main App Configuration ---
-    const SECURE_API_ENDPOINT = '/api/get-rate'; 
+    // This will point to your Netlify function when deployed.
+    const SECURE_API_ENDPOINT = '/.netlify/functions/get-rate'; 
 
     const state = {
         rate: 0,
@@ -83,7 +84,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const response = await fetch(SECURE_API_ENDPOINT);
             
             if (!response.ok) {
-                throw new Error(`Network response was not ok. Status: ${response.status}`);
+                const errorData = await response.json().catch(() => ({ error: 'Network response was not ok.' }));
+                throw new Error(errorData.error || `Network response was not ok. Status: ${response.status}`);
             }
             
             const data = await response.json();
